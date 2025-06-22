@@ -1,0 +1,407 @@
+{
+  "ignore": [],
+  "databases": {
+    "170ec2ca-1ca8-802c-9bc2-f52a3416dadd": {
+      "_name": "Muscle Groups",
+      "varName": "muscleGroups",
+      "pathName": "muscle-groups",
+      "properties": {
+        "TE%3FO": {
+          "_name": "30-Day Activity ",
+          "_type": "formula",
+          "varName": "30DayActivity",
+          "readOnly": false
+        },
+        "Ytlg": {
+          "_name": "🤸🏻‍♂️ Exercises Stability ",
+          "_type": "relation",
+          "varName": "exercisesStability",
+          "readOnly": false
+        },
+        "%5Eomy": {
+          "_name": "Exercises Primary ",
+          "_type": "relation",
+          "varName": "exercisesPrimary",
+          "readOnly": false
+        },
+        "nIf%40": {
+          "_name": "(WIP?) Priority",
+          "_type": "number",
+          "varName": "wipPriority",
+          "readOnly": false
+        },
+        "tlpS": {
+          "_name": "Activation This Week",
+          "_type": "formula",
+          "varName": "activationThisWeek",
+          "readOnly": false
+        },
+        "title": {
+          "_name": "Name",
+          "_type": "title",
+          "varName": "name",
+          "readOnly": false
+        }
+      }
+    },
+    "15bec2ca-1ca8-80c6-b48f-dea439d1017b": {
+      "_name": "Exercises ",
+      "varName": "exercises",
+      "pathName": "exercises",
+      "properties": {
+        "EAuY": {
+          "_name": "Muscle Group 30-Day Activity Score",
+          "_type": "formula",
+          "varName": "muscleGroup_30DayActivityScore",
+          "readOnly": false
+        },
+        "%5EZ%3EG": {
+          "_name": "Last Set Was This Week",
+          "_type": "formula",
+          "varName": "lastSetWasThisWeek",
+          "readOnly": false
+        },
+        "%60BtR": {
+          "_name": "Gym Set",
+          "_type": "relation",
+          "varName": "gymSet",
+          "readOnly": false
+        },
+        "%60%5CTO": {
+          "_name": "Action: Rehab",
+          "_type": "button",
+          "varName": "actionRehab",
+          "readOnly": false
+        },
+        "em%3Bx": {
+          "_name": "Last Session Time",
+          "_type": "formula",
+          "varName": "lastSessionTime",
+          "readOnly": false
+        },
+        "rgRe": {
+          "_name": "💪🏻 Stabiliser Muscle Groups",
+          "_type": "relation",
+          "varName": "stabiliserMuscleGroups",
+          "readOnly": false
+        },
+        "tqAu": {
+          "_name": "Action: Start",
+          "_type": "button",
+          "varName": "actionStart",
+          "readOnly": false
+        },
+        "vN%3Am": {
+          "_name": "Muscle Group Score",
+          "_type": "formula",
+          "varName": "muscleGroupScore",
+          "readOnly": false
+        },
+        "xT%3Bk": {
+          "_name": "Primary Muscle Groups",
+          "_type": "relation",
+          "varName": "primaryMuscleGroups",
+          "readOnly": false
+        },
+        "title": {
+          "_name": "Name",
+          "_type": "title",
+          "varName": "name",
+          "readOnly": false
+        },
+        "mMKh": {
+          "_name": "Equipment Needed",
+          "_type": "relation",
+          "varName": "equipmentNeeded",
+          "readOnly": false
+        }
+      }
+    },
+    "156ec2ca-1ca8-80f9-9cc5-de1b6c166cc5": {
+      "_name": "Gym Trip Log",
+      "varName": "gymTripLog",
+      "pathName": "gym-trip-log",
+      "properties": {
+        "%3AsyF": {
+          "_name": "Last 8",
+          "_type": "formula",
+          "varName": "last_8",
+          "readOnly": false
+        },
+        "PTOR": {
+          "_name": "Fix time (temp)",
+          "_type": "button",
+          "varName": "fixTimeTemp",
+          "readOnly": false
+        },
+        "QWEx": {
+          "_name": "Recent",
+          "_type": "formula",
+          "varName": "recent",
+          "readOnly": false
+        },
+        "RV%3C_": {
+          "_name": "Location",
+          "_type": "select",
+          "varName": "location",
+          "readOnly": false
+        },
+        "VYwU": {
+          "_name": "Visit Duration (m)",
+          "_type": "number",
+          "varName": "visitDurationM",
+          "readOnly": false
+        },
+        "YkY%5E": {
+          "_name": "Muscle Group Score",
+          "_type": "formula",
+          "varName": "muscleGroupScore",
+          "readOnly": false
+        },
+        "Zk%5E%5D": {
+          "_name": "Visit Time",
+          "_type": "date",
+          "varName": "visitTime",
+          "readOnly": false
+        },
+        "%60dER": {
+          "_name": "Session In Progress",
+          "_type": "formula",
+          "varName": "sessionInProgress",
+          "readOnly": false
+        },
+        "ikS~": {
+          "_name": "Action",
+          "_type": "button",
+          "varName": "action",
+          "readOnly": false
+        },
+        "rT%60g": {
+          "_name": "Relative Week Number",
+          "_type": "formula",
+          "varName": "relativeWeekNumber",
+          "readOnly": false
+        },
+        "uqME": {
+          "_name": "Gym Set",
+          "_type": "relation",
+          "varName": "gymSet",
+          "readOnly": false
+        },
+        "~cwZ": {
+          "_name": "Rollup",
+          "_type": "rollup",
+          "varName": "rollup",
+          "readOnly": false
+        },
+        "title": {
+          "_name": "Name",
+          "_type": "title",
+          "varName": "name",
+          "readOnly": false
+        }
+      }
+    },
+    "19bec2ca-1ca8-80c6-b54f-f8bb4ddeac74": {
+      "_name": "Gym Set Strategy",
+      "varName": "gymSetStrategy",
+      "pathName": "gym-set-strategy",
+      "properties": {
+        "Cu%3CM": {
+          "_name": "Minimum Reps",
+          "_type": "number",
+          "varName": "minimumReps",
+          "readOnly": false
+        },
+        "EUJw": {
+          "_name": "Maximum Reps",
+          "_type": "number",
+          "varName": "maximumReps",
+          "readOnly": false
+        },
+        "Ikiw": {
+          "_name": "Colour",
+          "_type": "select",
+          "varName": "colour",
+          "readOnly": false
+        },
+        "%7Bb%60e": {
+          "_name": "Gym Set",
+          "_type": "relation",
+          "varName": "gymSet",
+          "readOnly": false
+        },
+        "title": {
+          "_name": "Name",
+          "_type": "title",
+          "varName": "name",
+          "readOnly": false
+        }
+      }
+    },
+    "15bec2ca-1ca8-8058-9979-d94bd39839eb": {
+      "_name": "Gym Set",
+      "varName": "gymSet",
+      "pathName": "gym-set",
+      "properties": {
+        "%3A%3DcL": {
+          "_name": "Visit Time Earliest ",
+          "_type": "formula",
+          "varName": "visitTimeEarliest",
+          "readOnly": false
+        },
+        "%3DljL": {
+          "_name": "Gym Trip Log",
+          "_type": "relation",
+          "varName": "gymTripLog",
+          "readOnly": false
+        },
+        "KHux": {
+          "_name": "Sets: Previous",
+          "_type": "formula",
+          "varName": "setsPrevious",
+          "readOnly": false
+        },
+        "L~i~": {
+          "_name": "Challenge ",
+          "_type": "number",
+          "varName": "challenge",
+          "readOnly": false
+        },
+        "NPqJ": {
+          "_name": "Reps",
+          "_type": "number",
+          "varName": "reps",
+          "readOnly": false
+        },
+        "Pnwo": {
+          "_name": "Sort Code",
+          "_type": "formula",
+          "varName": "sortCode",
+          "readOnly": false
+        },
+        "Qp%5E%3D": {
+          "_name": "Visit Time",
+          "_type": "rollup",
+          "varName": "visitTime",
+          "readOnly": false
+        },
+        "R~Cm": {
+          "_name": "🗺️ Gym Set Strategy",
+          "_type": "relation",
+          "varName": "gymSetStrategy",
+          "readOnly": false
+        },
+        "Smif": {
+          "_name": "Action: Dupe",
+          "_type": "button",
+          "varName": "actionDupe",
+          "readOnly": false
+        },
+        "VtcI": {
+          "_name": "Strategy Minimum Reps",
+          "_type": "rollup",
+          "varName": "strategyMinimumReps",
+          "readOnly": false
+        },
+        "%60ikE": {
+          "_name": "Set Muscle Score ",
+          "_type": "rollup",
+          "varName": "setMuscleScore",
+          "readOnly": false
+        },
+        "aW%5Ch": {
+          "_name": "ID",
+          "_type": "unique_id",
+          "varName": "id",
+          "readOnly": false
+        },
+        "f%60%7CL": {
+          "_name": "Done",
+          "_type": "checkbox",
+          "varName": "done",
+          "readOnly": false
+        },
+        "g%3BdG": {
+          "_name": "Gym Trip Is In Progress ",
+          "_type": "rollup",
+          "varName": "gymTripIsInProgress",
+          "readOnly": false
+        },
+        "htMp": {
+          "_name": "Action: Rename",
+          "_type": "button",
+          "varName": "actionRename",
+          "readOnly": false
+        },
+        "lBPF": {
+          "_name": "Sets: Experimental",
+          "_type": "formula",
+          "varName": "setsExperimental",
+          "readOnly": false
+        },
+        "mHu%5D": {
+          "_name": "Units",
+          "_type": "select",
+          "varName": "units",
+          "readOnly": false
+        },
+        "o_YP": {
+          "_name": "Display",
+          "_type": "formula",
+          "varName": "display",
+          "readOnly": false
+        },
+        "tGt~": {
+          "_name": "Exercise",
+          "_type": "relation",
+          "varName": "exercise",
+          "readOnly": false
+        },
+        "%7B%3BJK": {
+          "_name": "Previous Weight/Reps",
+          "_type": "formula",
+          "varName": "previousWeightReps",
+          "readOnly": false
+        },
+        "%7C%5Bql": {
+          "_name": "Strategy Maximum Reps",
+          "_type": "rollup",
+          "varName": "strategyMaximumReps",
+          "readOnly": false
+        },
+        "title": {
+          "_name": "Name",
+          "_type": "title",
+          "varName": "name",
+          "readOnly": false
+        },
+        "LRbz": {
+          "_name": "Created time",
+          "_type": "created_time",
+          "varName": "createdTime",
+          "readOnly": true
+        }
+      }
+    },
+    "199ec2ca-1ca8-8058-ae57-f72583493e13": {
+      "_name": "Exercise Equipment",
+      "varName": "exerciseEquipment",
+      "pathName": "exercise-equipment",
+      "properties": {
+        "~a%3Db": {
+          "_name": "🤸🏻‍♂️ Exercises ",
+          "_type": "relation",
+          "varName": "exercises",
+          "readOnly": false
+        },
+        "title": {
+          "_name": "Name",
+          "_type": "title",
+          "varName": "name",
+          "readOnly": false
+        }
+      }
+    }
+  }
+}

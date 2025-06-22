@@ -1,0 +1,40 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "src/server.ts",
+  "scripts": {
+    "run:production": "node dist/server.js",
+    "run:dev": "ts-node src/server.ts",
+    "start:nodemon": "nodemon",
+    "start": "npm run run:dev",
+    "build": "tsc",
+    "generate:notion-sdk": "dotenv -- npx notion-ts-client generate --sdk ./src/notion-sdk --secret $NOTION_API_TOKEN",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "nodemonConfig": {},
+  "dependencies": {
+    "@notionhq/client": "^3.1.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "notion-ts-client": "^0.2.18"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.3",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^8.0.0",
+    "jest": "^30.0.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
