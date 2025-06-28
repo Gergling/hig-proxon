@@ -1,17 +1,18 @@
-import { GymExerciseSet, SetProgressionStatus, SetStatus } from "../types";
+import { GymExerciseSet, GymExerciseSetProgression, SetProgressionStatus, SetStatus } from "../types";
+import { getSetValidityStatus } from "./get-set-validity-status";
 
-type FollowingSet = Required<GymExerciseSet>;
+type SetWithoutProgression = Omit<GymExerciseSet, 'progression'>;
 
 const getSetProgressionStatus = (
   {
     challenge,
-    progression: {
-      previous,
-      month,
-      all,
-    },
     reps,
-  }: FollowingSet
+  }: SetWithoutProgression,
+  {
+    previous,
+    month,
+    all,
+  }: GymExerciseSetProgression,
 ): SetProgressionStatus => {
   // First we check the previous challenge level. If it fails, we
   // don't need to know much more.
@@ -43,15 +44,14 @@ const getSetProgressionStatus = (
   return 'backslide';
 };
 
-export const getSetStatus = (set: GymExerciseSet): SetStatus => {
-  const {
-    progression,
-    reps,
-    strategy: { minimum },
-  } = set;
-  if (reps < 1) return 'zero';
-  if (reps < minimum) return 'invalid';
+export const getSetStatus = (
+  set: SetWithoutProgression,
+  progression: GymExerciseSetProgression | undefined,
+): SetStatus => {
+  const validity = getSetValidityStatus(set.reps, set.strategy.minimum);
+
+  if (validity !== 'valid') return validity;
   if (!progression) return 'first';
 
-  return getSetProgressionStatus({ ...set, progression });
+  return getSetProgressionStatus(set, progression);
 };

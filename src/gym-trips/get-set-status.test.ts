@@ -3,17 +3,19 @@ import { getSetStatus } from "./get-set-status";
 import { mockGymExercise, mockGymSetStrategy } from "./mock-data";
 
 const mockSetBase: GymExerciseSet = {
-  exercise: mockGymExercise,
   challenge: 2,
+  exercise: mockGymExercise,
+  id: '',
+  units: 'Kg',
   reps: 10,
   strategy: mockGymSetStrategy,
+  validity: 'valid',
 };
-const mockSetBaseProgression = {
+const mockSetBaseProgression: GymExerciseSetProgression = {
   previous: mockSetBase,
   month: mockSetBase,
   all: mockSetBase,
 };
-mockSetBase.progression = mockSetBaseProgression;
 
 const mockSetLowChallenge: GymExerciseSet = {
   ...mockSetBase,
@@ -36,6 +38,7 @@ const mockSetHighReps: GymExerciseSet = {
 const mockData: {
   status: SetStatus;
   set: GymExerciseSet;
+  progression?: GymExerciseSetProgression;
 }[] = [
   {
     status: 'zero',
@@ -48,9 +51,9 @@ const mockData: {
   {
     status: 'first',
     set: {
-      progression: undefined,
       reps: 7
-    }
+    },
+    progression: undefined,
   },
   {
     status: 'rehab',
@@ -73,67 +76,67 @@ const mockData: {
   },
   {
     status: 'regrowth',
-    set: {
-      ...mockSetHighChallenge,
-      progression: {
-        ...mockSetBaseProgression,
-        all: mockSetHighChallenge,
-      }
+    set: mockSetHighChallenge,
+    progression: {
+      ...mockSetBaseProgression,
+      all: mockSetHighChallenge,
     },
   },
   {
     status: 'regrowth',
-    set: {
-      ...mockSetHighReps,
-      progression: {
-        ...mockSetBaseProgression,
-        all: mockSetHighChallenge,
-      }
+    set: mockSetHighReps,
+    progression: {
+      ...mockSetBaseProgression,
+      all: mockSetHighChallenge,
     },
   },
   {
     status: 'uptick',
-    set: {
-      ...mockSetHighChallenge,
-      progression: {
-        ...mockSetBaseProgression,
-        all: mockSetHighChallenge,
-        month: mockSetHighChallenge,
-      }
+    set: mockSetHighChallenge,
+    progression: {
+      ...mockSetBaseProgression,
+      all: mockSetHighChallenge,
+      month: mockSetHighChallenge,
     },
   },
   {
     status: 'uptick',
-    set: {
-      ...mockSetHighReps,
-      progression: {
-        ...mockSetBaseProgression,
-        all: mockSetHighChallenge,
-        month: mockSetHighChallenge,
-      }
+    set: mockSetHighReps,
+    progression: {
+      ...mockSetBaseProgression,
+      all: mockSetHighChallenge,
+      month: mockSetHighChallenge,
     },
   },
   {
     status: 'steady',
-    set: {
-      progression: {
-        ...mockSetBaseProgression,
-        all: mockSetHighChallenge,
-        month: mockSetHighChallenge,
-      }
+    progression: {
+      ...mockSetBaseProgression,
+      all: mockSetHighChallenge,
+      month: mockSetHighChallenge,
     },
   },
   {
     status: 'backslide',
     set: mockSetLowReps,
   },
-].map(({ set, status }) => ({
+].map(({ set, status, ...props }) => ({
+  progression: mockSetBaseProgression,
+  ...props,
   status: status as SetStatus,
-  set: { ...mockSetBase, ...set }
+  set: { ...mockSetBase, ...set },
 }));
 
 describe('getSetStatus', () => {
-  it.each(mockData.map(({ set, status }) => [status, set]))('tests for status %p', (status, set) => {
-    expect(getSetStatus(set)).toBe(status);
+  it.each(mockData.map(({
+    set,
+    status,
+    progression,
+  }) => [
+    status,
+    set,
+    progression,
+  ]))('tests for status %p', (status, set, progression) => {
+    expect(getSetStatus(set, progression)).toBe(status);
   });
 });
