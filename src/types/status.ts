@@ -1,13 +1,21 @@
-export type SetProgressionStatus
-  = 'fluctuation'
-  | 'rehab'
+export type SetProgressionStatus =
   | 'growth'
   | 'regrowth'
   | 'uptick'
   | 'steady'
-  | 'backslide';
+  | 'fluctuation'
+  | 'backslide'
+  | 'rehab'
+;
 
-  export type SetStatus = SetProgressionStatus
+type SetInvalidityStatus =
   | 'zero'
-  | 'invalid'
+  | 'invalid';
+
+export type SetValidityStatus =
+  | SetInvalidityStatus
+  | 'valid';
+
+export type SetStatus = SetProgressionStatus
+  | SetInvalidityStatus
   | 'first';
