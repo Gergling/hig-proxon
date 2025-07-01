@@ -1,118 +1,43 @@
-import { ExerciseEquipmentResponseDTO } from "../notion-sdk/dbs/exercise-equipment";
-import { ExercisesResponseDTO } from "../notion-sdk/dbs/exercises";
-import { MuscleGroupsResponseDTO } from "../notion-sdk/dbs/muscle-groups";
-import { Equipment, ExerciseMuscleGroup, GymExercise, MuscleGroup } from "../types";
-import { getEquipment, getExercise, getMuscleGroup } from "./dto";
+import { getRelatedById } from "../common/utils";
+import { getEquipmentLookup, getMuscleGroupLookup } from "../lookups";
+import { DTOProps, ExerciseMuscleGroup, GymExercise, MuscleGroup } from "../types";
+import { getExercise } from "./dto";
 
-const useEquipment = (equipmentData: ExerciseEquipmentResponseDTO[]) => {
-  const equipmentMapping: {
-    [id: string]: Equipment;
-  } = equipmentData.reduce((map, equipmentDataItem) => {
-    const equipment = getEquipment(equipmentDataItem);
-    return {
-      ...map,
-      [equipment.id]: equipment,
-    };
-  }, {});
-
-  const getEquipmentById = (id: string) =>
-    equipmentMapping[id as keyof typeof equipmentMapping];
-  
-  return {
-    equipmentMapping,
-    getEquipmentById,
-  }
-};
-
-// const useMuscleGroup = (muscleGroupData: MuscleGroupsResponseDTO[]) => {
-//   const {
-//     muscleGroupList,
-//     muscleGroupMapping,
-//   } = muscleGroupData.reduce(({
-//     muscleGroupList,
-//     muscleGroupMapping,
-//   }, muscleGroupDataItem) => {
-//     const muscleGroup = getMuscleGroup(muscleGroupDataItem);
-//     return {
-//       muscleGroupList: [
-//         ...muscleGroupList,
-//         muscleGroup,
-//       ],
-//       muscleGroupMapping: {
-//         ...muscleGroupMapping,
-//         [muscleGroup.id]: muscleGroup,
-//       },
-//     };
-//   }, {
-//     muscleGroupList: [] as { id: string; name: string; }[],
-//     muscleGroupMapping: {},
-//   });
-
-//   const getMapFactory = (focus: boolean) => (id: string): ExerciseMuscleGroup => {
-//     const muscleGroup = muscleGroupMapping[id as keyof typeof muscleGroupMapping];
-//     return {
-//       focus,
-//       muscleGroup,
-//     };
-//   };
-
-//   return {
-//     getMapFactory,
-//     muscleGroupList,
-//   };
-// }
-
-
-const getMuscleGroupLookup = (muscleGroupData: MuscleGroupsResponseDTO[]) => {
-  const muscleGroupMapping: {
-    [id: string]: MuscleGroup;
-  } = muscleGroupData.reduce((map, muscleGroupDataItem) => {
-    const muscleGroup = getMuscleGroup(muscleGroupDataItem);
-    return {
-      ...map,
-      [muscleGroup.id]: muscleGroup,
-    };
-  }, {});
-  const getMuscleGroupFactory = (focus: boolean) => (id: string): ExerciseMuscleGroup => {
-    const muscleGroup = muscleGroupMapping[id as keyof typeof muscleGroupMapping];
-    return {
-      focus,
-      muscleGroup,
-    };
-  };
-
-  return {
-    getMuscleGroupFactory,
-    muscleGroupMapping,
-  };
-}
-
-export const getExercises = (
-  equipmentData: ExerciseEquipmentResponseDTO[],
-  exerciseData: ExercisesResponseDTO[],
-  muscleGroupData: MuscleGroupsResponseDTO[],
-): {
-  equipment: Equipment[];
+export const getExercises = ({
+  equipment: equipmentData,
+  exercises: exerciseData,
+  muscleGroups: muscleGroupData,
+}: Pick<DTOProps, 'equipment' | 'exercises' | 'muscleGroups'>): {
+  // equipment: Equipment[];
   exercises: GymExercise[];
-  muscleGroups: MuscleGroup[];
+  // muscleGroups: MuscleGroup[];
+  // getEquipmentById: (id: string) => Equipment;
+  getExerciseById: (id: string) => GymExercise;
 } => {
-  // const allEquipment = equipmentData.reduce((map, equipmentDataItem) => {
-  //   const equipment = getEquipment(equipmentDataItem);
-  //   return {
-  //     ...map,
-  //     [equipment.id]: equipment,
-  //   };
-  // }, {});
   const {
-    equipmentMapping,
-    getEquipmentById
-  } = useEquipment(equipmentData);
+    getEquipmentById,
+  } = getEquipmentLookup(equipmentData);
   const {
-    getMuscleGroupFactory,
-    muscleGroupMapping,
+    // getMuscleGroupFactory,
+    // muscleGroupMapping,
+    // muscleGroups,
+    getMuscleGroupById,
   } = getMuscleGroupLookup(muscleGroupData);
+  const getMuscleGroupFactory = (focus: boolean) => (id: string) => {
+    const muscleGroup = getMuscleGroupById(id);
 
-  const exercises: GymExercise[] = exerciseData.map((exerciseDataItem) => {
+    if (!muscleGroup) return undefined;
+
+    return { muscleGroup, focus };
+  };
+  const exerciseMapping: {
+    [id: string]: GymExercise;
+  } = {};
+
+  const exercises: GymExercise[] = [];
+  const getExerciseById = (id: string) => exerciseMapping[id];
+
+  exerciseData.forEach((exerciseDataItem) => {
     const {
       equipmentNeededIds,
       // TODO: Probably should be part of the GYM-EMS-0-NTN standard, but
@@ -122,10 +47,10 @@ export const getExercises = (
       stabiliserMuscleGroupsIds,
       name
     } = getExercise(exerciseDataItem);
-    const exerciseEquipment: Equipment[] = equipmentNeededIds
-      .map(getEquipmentById);
-    // const exerciseEquipment: Equipment[] = equipmentNeededIds
-    //   .map((id) => allEquipment[id as keyof typeof allEquipment]);
+    const exerciseEquipment = getRelatedById(
+      equipmentNeededIds,
+      getEquipmentById
+    );
 
     // TODO: Figure out how to handle duplication, or whether there's any
     // point to doing so, since we'll want to move over to hardcoded ASAP.
@@ -134,28 +59,31 @@ export const getExercises = (
     //   ...stabiliserMuscleGroupsIds
     // ];
     // const hasDuplicatedMuscleGroupIds = [...new Set(allRelatedMuscleGroupIds)].length !== allRelatedMuscleGroupIds.length;
-    const focusMuscleGroups = primaryMuscleGroupsIds.map(getMuscleGroupFactory(true));
-    const stabiliserMuscleGroups = stabiliserMuscleGroupsIds.map(getMuscleGroupFactory(false));
+    const focusMuscleGroups = getRelatedById(primaryMuscleGroupsIds, getMuscleGroupFactory(true));
+    const stabiliserMuscleGroups = getRelatedById(stabiliserMuscleGroupsIds, getMuscleGroupFactory(false));
     const muscleGroups: ExerciseMuscleGroup[] = [
       ...focusMuscleGroups,
       ...stabiliserMuscleGroups,
     ];
     const ems0ntn = focusMuscleGroups.length + (stabiliserMuscleGroups.length / 2);
 
-    return {
+    const exercise: GymExercise = {
+      id,
       equipment: exerciseEquipment,
       muscleGroups,
       ems0ntn,
       name,
-    }
+    };
+
+    exercises.push(exercise);
+    exerciseMapping[id] = exercise;
   });
 
-  const equipment = Object.values(equipmentMapping);
-  const muscleGroups = Object.values(muscleGroupMapping);
-
   return {
-    equipment,
+    // equipment,
     exercises,
-    muscleGroups,
+    // muscleGroups,
+    // getEquipmentById,
+    getExerciseById,
   };
 };
