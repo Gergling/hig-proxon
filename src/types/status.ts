@@ -16,6 +16,9 @@ export type SetValidityStatus =
   | SetInvalidityStatus
   | 'valid';
 
+export type SetProgressionStatusFirst = 'first';
+
+// TODO: Check if this is *really* being used.
 export type SetStatus = SetProgressionStatus
   | SetInvalidityStatus
-  | 'first';
+  | SetProgressionStatusFirst;
