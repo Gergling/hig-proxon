@@ -1,6 +1,7 @@
+import { Temporal } from "temporal-polyfill";
 import { getRelatedById } from "../common/utils";
 import { getEquipmentLookup, getMuscleGroupLookup } from "../lookups";
-import { DTOProps, ExerciseMuscleGroup, GymExercise, MuscleGroup } from "../types";
+import { DTOProps, ExerciseMuscleGroup, GymExercise, GymExerciseSet, MuscleGroup } from "../types";
 import { getExercise } from "./dto";
 
 export const getExercises = ({
@@ -8,16 +9,19 @@ export const getExercises = ({
   exercises: exerciseData,
   muscleGroups: muscleGroupData,
 }: Pick<DTOProps, 'equipment' | 'exercises' | 'muscleGroups'>): {
+  addMuscleGroupActivity: (set: GymExerciseSet, date: Temporal.PlainDate) => void;
   // equipment: Equipment[];
   exercises: GymExercise[];
   // muscleGroups: MuscleGroup[];
   // getEquipmentById: (id: string) => Equipment;
-  getExerciseById: (id: string) => GymExercise;
+  getMuscleGroupById: (id: string) => MuscleGroup | undefined;
+  getExerciseById: (id: string) => GymExercise | undefined;
 } => {
   const {
     getEquipmentById,
   } = getEquipmentLookup(equipmentData);
   const {
+    addMuscleGroupActivity,
     // getMuscleGroupFactory,
     // muscleGroupMapping,
     // muscleGroups,
@@ -35,7 +39,7 @@ export const getExercises = ({
   } = {};
 
   const exercises: GymExercise[] = [];
-  const getExerciseById = (id: string) => exerciseMapping[id];
+  const getExerciseById = (id: string): GymExercise | undefined => exerciseMapping[id];
 
   exerciseData.forEach((exerciseDataItem) => {
     const {
@@ -80,10 +84,12 @@ export const getExercises = ({
   });
 
   return {
+    addMuscleGroupActivity,
     // equipment,
     exercises,
     // muscleGroups,
     // getEquipmentById,
     getExerciseById,
+    getMuscleGroupById,
   };
 };
