@@ -6,7 +6,7 @@ const getByFactory = <T>(mapping: {
   [categoryKey: string]: {
     [getKey: string]: T;
   };
-}) => (finderKey: string) => {
+}) => (finderKey: keyof typeof mapping) => {
   if (!mapping[finderKey]) throw new Error(`No such finderKey '${finderKey}' for mapping.`);
   return (id: string): T | undefined => {
     return mapping[finderKey][id];
@@ -37,6 +37,8 @@ export const getLookup = <DTO, T>(
   const getByUnique = getByFactory<T>(uniqueMapping);
   // const getByIndex = getByFactory<T[]>(indexMapping);
 
+  const getItems = (): T[] => items;
+
   data.forEach((dtoItem) => {
     const item = map(dtoItem);
     items.push(item);
@@ -52,6 +54,7 @@ export const getLookup = <DTO, T>(
   return {
     // getByIndex,
     getByUnique,
+    getItems,
     items,
   };
 };
