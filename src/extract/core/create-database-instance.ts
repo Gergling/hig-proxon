@@ -1,4 +1,4 @@
-type DatabaseConstructor = new (config: { notionSecret: string }) => any;
+import { DatabaseConstructor } from "../types";
 
 export const createDbInstance = <T extends DatabaseConstructor>(
   DbConstructor: T,
