@@ -112,7 +112,7 @@ const mockData: {
   set: { ...mockSetBase, ...set },
 }));
 
-describe('getSetStatus', () => {
+describe('getSetProgressionStatus', () => {
   it.each(mockData.map(({
     set,
     status,
