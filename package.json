@@ -8,7 +8,7 @@
     "start:nodemon": "nodemon",
     "start": "npm run run:dev",
     "build": "tsc",
-    "generate:notion-sdk": "dotenv -- npx notion-ts-client generate --sdk ./src/notion-sdk --secret $NOTION_API_TOKEN",
+    "generate:notion-sdk": "npx notion-ts-client generate --sdk ./src/notion-sdk",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

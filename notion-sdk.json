@@ -7,7 +7,7 @@
       "pathName": "muscle-groups",
       "properties": {
         "TE%3FO": {
-          "_name": "30-Day Activity ",
+          "_name": "14-Day Activity ",
           "_type": "formula",
           "varName": "30DayActivity",
           "readOnly": false
