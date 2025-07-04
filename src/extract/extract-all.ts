@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { DTOProps } from "../types";
 import { extractGymSet, extractGymTripLog } from "./extractions";
 import { extractExerciseEquipment } from "./extractions/exercise-equipment";
@@ -6,10 +7,10 @@ import { extractGymSetStrategy } from "./extractions/gym-set-strategy";
 import { extractMuscleGroups } from "./extractions/muscle-groups";
 
 export const extractAll = async (): Promise<DTOProps> => {
-  const notionSecret = process.env.NOTION_API_TOKEN;
+  const notionSecret = process.env.NOTION_TS_CLIENT_NOTION_SECRET;
 
   if (!notionSecret) {
-    throw new Error('No NOTION_API_TOKEN environment variable specified.');
+    throw new Error('No NOTION_TS_CLIENT_NOTION_SECRET environment variable specified.');
   }
 
   const equipment = await extractExerciseEquipment(notionSecret);
