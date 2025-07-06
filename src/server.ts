@@ -1,9 +1,8 @@
 // src/server.ts
 import 'dotenv/config'; // Loads .env file
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
-import { Client } from '@notionhq/client';
-import { retrieve } from './load/retrieve';
+import { retrieveGymData } from './controllers';
 
 const app = express();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -22,9 +21,6 @@ if (!NOTION_TS_CLIENT_NOTION_SECRET) {
   console.error("Error: NOTION_TS_CLIENT_NOTION_SECRET is not set in your environment variables!");
   process.exit(1);
 }
-
-// Initialize the Notion client
-const notion = new Client({ auth: NOTION_TS_CLIENT_NOTION_SECRET });
 
 // Configure CORS
 app.use(cors({
@@ -45,18 +41,7 @@ app.use(cors({
 app.use(express.json());
 
 // Endpoint to proxy Notion database queries
-app.get('/proxy-gym', (req, res) => {
-  retrieve()
-    .then(res.json)
-    .catch((error) => {
-      console.error(error)
-      res.status(500).json({
-        error: 'Failed to fetch from store',
-        details: error.message || 'Unknown error',
-        code: error.code,
-      });
-    });
-});
+app.get('/proxy-gym', retrieveGymData);
 
 // Start the server
 app.listen(port, () => {
