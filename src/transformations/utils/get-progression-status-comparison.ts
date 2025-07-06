@@ -23,7 +23,3 @@ export const getProgressionStatusComparison = (
   const idxB = statusMapping[b];
   return idxB - idxA;
 };
-
-// TODO: Review whether this is required.
-export const getProgressionStatusIDX = (status: SetProgressionStatus) =>
-  statusMapping[status];

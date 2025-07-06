@@ -1,6 +1,6 @@
 import { Equipment, GymExercise, GymExerciseSet, GymSetStrategy } from "../types";
 
-export const mockGymEquipment: Equipment = {
+const mockGymEquipment: Equipment = {
   name: 'Muscle Machine',
 };
 
