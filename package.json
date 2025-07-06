@@ -10,7 +10,8 @@
     "build": "tsc",
     "generate:notion-sdk": "npx notion-ts-client generate --sdk ./src/notion-sdk",
     "data:backfill": "ts-node src/backfill/script.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "validate:unused": "knip"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +36,7 @@
     "cross-env": "^7.0.3",
     "dotenv-cli": "^8.0.0",
     "jest": "^30.0.2",
+    "knip": "^5.61.3",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
