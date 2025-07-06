@@ -3,9 +3,6 @@ import 'dotenv/config'; // Loads .env file
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { Client } from '@notionhq/client';
-import { fetchGymTripData } from './sdk-query';
-import { fetchDTOs } from './queries/fetch-dtos';
-import { getGymTripView } from './view';
 import { retrieve } from './load/retrieve';
 
 const app = express();

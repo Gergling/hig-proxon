@@ -10,8 +10,8 @@ export type ExerciseSetProgression = {
 };
 
 export type GymExerciseSet = {
-  exercise: GymExercise;
   challenge: number;
+  exercise: GymExercise;
   id: string;
   progression?: ExerciseSetProgression & { status: SetProgressionStatus; };
   reps: number;

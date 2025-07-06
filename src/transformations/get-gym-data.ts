@@ -11,6 +11,7 @@ import { getExerciseSetLookup, getStrategyLookup } from "../lookups";
 export const getGymData = (dtos: DTOProps) => {
   const {
     addMuscleGroupActivity,
+    getMuscleGroups,
     getExerciseById,
   } = getExercises(dtos);
   const {
@@ -114,7 +115,7 @@ export const getGymData = (dtos: DTOProps) => {
   return {
     // equipment,
     // exercises,
-    // muscleGroups,
+    getMuscleGroups,
     gymTrips,
   };
 };

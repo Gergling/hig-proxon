@@ -1,5 +1,5 @@
 // Let's imagine you have a database of online events in your Notion :)
-import { getGymTrip } from './gym-trips/get-gym-trip';
+import { getGymTrip } from './transformations/dto/get-gym-trip';
 import {
   GymTripLogDatabase,
   GymTripLogResponseDTO,
@@ -7,11 +7,11 @@ import {
 } from './notion-sdk/dbs/gym-trip-log';
 
 const getDB = () => {
-  const notionSecret = process.env.NOTION_API_TOKEN;
+  const notionSecret = process.env.NOTION_TS_CLIENT_NOTION_SECRET;
 
   if (notionSecret) return new GymTripLogDatabase({ notionSecret });
 
-  throw new Error('No NOTION_API_TOKEN environment variable specified.');
+  throw new Error('No NOTION_TS_CLIENT_NOTION_SECRET environment variable specified.');
 };
 
 export const fetchGymTripData = async () => {

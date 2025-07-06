@@ -10,9 +10,8 @@ export const getExercises = ({
   muscleGroups: muscleGroupData,
 }: Pick<DTOProps, 'equipment' | 'exercises' | 'muscleGroups'>): {
   addMuscleGroupActivity: (set: GymExerciseSet, date: Temporal.PlainDate) => void;
-  // equipment: Equipment[];
   exercises: GymExercise[];
-  // muscleGroups: MuscleGroup[];
+  getMuscleGroups: () => MuscleGroup[];
   // getEquipmentById: (id: string) => Equipment;
   getMuscleGroupById: (id: string) => MuscleGroup | undefined;
   getExerciseById: (id: string) => GymExercise | undefined;
@@ -22,9 +21,7 @@ export const getExercises = ({
   } = getEquipmentLookup(equipmentData);
   const {
     addMuscleGroupActivity,
-    // getMuscleGroupFactory,
-    // muscleGroupMapping,
-    // muscleGroups,
+    getMuscleGroups,
     getMuscleGroupById,
   } = getMuscleGroupLookup(muscleGroupData);
   const getMuscleGroupFactory = (focus: boolean) => (id: string) => {
@@ -85,9 +82,8 @@ export const getExercises = ({
 
   return {
     addMuscleGroupActivity,
-    // equipment,
     exercises,
-    // muscleGroups,
+    getMuscleGroups,
     // getEquipmentById,
     getExerciseById,
     getMuscleGroupById,

@@ -1,22 +1,25 @@
 // TODO: Comments are legit, but this file isn't done.
 
-import { DTOProps, GymTripProps } from "../types";
-import { getExercises } from "./get-exercises";
+import { DTOProps, GymTripProps, MuscleGroup } from "../types";
+import { getNonCircularMuscleGroup, getNonCircularTrip } from "./cleaners";
 import { getGymData } from "./get-gym-data";
 
 export const transformAll = (
   dtos: DTOProps
 ): {
+  muscleGroups: MuscleGroup[];
   trips: GymTripProps[];
 } => {
   const {
-    // equipment,
-    exercises,
-    // muscleGroups,
-  } = getExercises(dtos);
+    // TODO: Exercises by muscle group in the appropriate order.
+    getMuscleGroups,
+    gymTrips,
+  } = getGymData(dtos);
 
-  // At this point, the gym trip data is view data, which we can store.
-  const { gymTrips: trips } = getGymData(dtos);
+  // For loading purposes, we remove the circular dependency from
+  // muscleGroups -> activity[] -> exercise -> muscleGroups
+  const muscleGroups = getMuscleGroups().map(getNonCircularMuscleGroup);
+  const trips = gymTrips.map(getNonCircularTrip);
 
   // TODO: Muscle groups will need exercises and sets assigned with relevant
   // gym trip dates. This doesn't need a complete breakdown of those objects.
@@ -38,7 +41,9 @@ export const transformAll = (
   // View data will be a single file in multiple sections:
   // * trips
   // * muscle groups
+  // * overview(?)
   return {
+    muscleGroups,
     trips,
   };
 };

@@ -6,7 +6,7 @@ import { GymTripLogDatabase } from '../notion-sdk/dbs/gym-trip-log';
 import { MuscleGroupsDatabase } from '../notion-sdk/dbs/muscle-groups';
 
 export const getDBs = () => {
-  const notionSecret = process.env.NOTION_API_TOKEN;
+  const notionSecret = process.env.NOTION_TS_CLIENT_NOTION_SECRET;
 
   if (notionSecret) return {
     equipmentDB: new ExerciseEquipmentDatabase({ notionSecret }),
@@ -17,6 +17,6 @@ export const getDBs = () => {
     tripDB: new GymTripLogDatabase({ notionSecret }),
   };
 
-  throw new Error('No NOTION_API_TOKEN environment variable specified.');
+  throw new Error('No NOTION_TS_CLIENT_NOTION_SECRET environment variable specified.');
 };
 
