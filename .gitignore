@@ -12,8 +12,8 @@ dist/
 .env.test.local
 .env.production.local
 
-# TODO: Review for private keys.
-notion-ts-client.config.json
+# ETL Load Cache
+cache/
 
 # Logs
 npm-debug.log*
