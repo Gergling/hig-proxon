@@ -1,4 +1,4 @@
-import { extractAll } from "../extract";
+import { extractAll } from "../data";
 
 export const extract = async () => {
   console.log('+++ Extracting...');
@@ -6,6 +6,7 @@ export const extract = async () => {
     const dtos = await extractAll();
     const extractionReport = Object.entries(dtos).reduce((report, [key, value]) => {
       return {
+        ...report,
         [key]: value.length,
       };
     }, {})

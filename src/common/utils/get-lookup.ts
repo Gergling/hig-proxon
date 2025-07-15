@@ -40,6 +40,9 @@ export const getLookup = <DTO, T>(
   const getItems = (): T[] => items;
 
   data.forEach((dtoItem) => {
+    // TODO: Optional function to check validity beforehand and simply omit
+    // items if they aren't. This will mean it can handle sets without assigned
+    // reps, challenge or units.
     const item = map(dtoItem);
     items.push(item);
     Object.entries(unique).forEach(([finderKey, getKey]) => {
