@@ -1,12 +1,14 @@
 // TODO: Comments are legit, but this file isn't done.
 
 import { DTOProps, GymTripProps, MuscleGroup } from "../types";
+import { getCurrentUtcInstant, instantToISOString } from "../utils/time-helpers";
 import { getNonCircularMuscleGroup, getNonCircularTrip } from "./cleaners";
 import { getGymData } from "./get-gym-data";
 
 export const transformAll = (
   dtos: DTOProps
 ): {
+  lastUpdatedTime: string;
   muscleGroups: MuscleGroup[];
   trips: GymTripProps[];
 } => {
@@ -20,6 +22,8 @@ export const transformAll = (
   // muscleGroups -> activity[] -> exercise -> muscleGroups
   const muscleGroups = getMuscleGroups().map(getNonCircularMuscleGroup);
   const trips = gymTrips.map(getNonCircularTrip);
+
+  const lastUpdatedTime = instantToISOString(getCurrentUtcInstant());
 
   // TODO: Muscle groups will need exercises and sets assigned with relevant
   // gym trip dates. This doesn't need a complete breakdown of those objects.
@@ -43,6 +47,7 @@ export const transformAll = (
   // * muscle groups
   // * overview(?)
   return {
+    lastUpdatedTime,
     muscleGroups,
     trips,
   };
