@@ -4,7 +4,7 @@
   "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
-    "data:backfill": "ts-node src/backfill/script.ts",
+    "data:backfill": "ts-node src/scripts/backfill.ts",
     "data:s3-test": "dotenv -- ts-node src/scripts/test-s3-storage.ts",
     "generate:notion-sdk": "npx notion-ts-client generate --sdk ./src/notion-sdk",
     "run:production": "node dist/server.js",

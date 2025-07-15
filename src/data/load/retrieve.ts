@@ -1,4 +1,4 @@
-import { retrieveJsonFromFile } from "../common/file"
+import { retrieveJsonFromFile } from "../../common/file"
 import { STORE_FILE_NAME } from "./constants"
 import { StoreProps } from "./types";
 
