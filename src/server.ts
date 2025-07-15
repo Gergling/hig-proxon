@@ -3,6 +3,7 @@ import 'dotenv/config'; // Loads .env file
 import express from 'express';
 import cors from 'cors';
 import { retrieveGymData } from './controllers';
+import { initialiseCache } from './data/load/cache';
 
 const app = express();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -13,14 +14,6 @@ const allowedOrigins = allowedOriginsRaw
   .split(',')
   .map(s => s.trim())
   .filter(s => s.length > 0);
-
-// Notion API token
-const NOTION_TS_CLIENT_NOTION_SECRET = process.env.NOTION_TS_CLIENT_NOTION_SECRET;
-
-if (!NOTION_TS_CLIENT_NOTION_SECRET) {
-  console.error("Error: NOTION_TS_CLIENT_NOTION_SECRET is not set in your environment variables!");
-  process.exit(1);
-}
 
 // Configure CORS
 app.use(cors({
@@ -43,8 +36,16 @@ app.use(express.json());
 // Endpoint to proxy Notion database queries
 app.get('/proxy-gym', retrieveGymData);
 
+console.log('Starting the server...')
+
 // Start the server
-app.listen(port, () => {
-  console.log(`Notion Proxy Server listening at http://localhost:${port}`);
-  console.log(`Allowed Origins: ${allowedOrigins.join(', ') || 'None configured (allowing same-origin & non-browser requests)'}`);
+initialiseCache().then(() => {
+  console.log('Cache initialised.')
+  app.listen(port, () => {
+    console.log(`Notion Proxy Server listening at http://localhost:${port}`);
+    console.log(`Allowed Origins: ${allowedOrigins.join(', ') || 'None configured (allowing same-origin & non-browser requests)'}`);
+  });
+}).catch((error) => {
+  process.stderr.write(error);
+  process.exit(1);
 });

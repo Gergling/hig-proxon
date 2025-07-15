@@ -1,8 +1,7 @@
-import { retrieveJsonFromFile } from "../../common/file"
+import { retrieveJsonFromS3 } from "../../repositories/s3/retrieve-from-s3";
 import { STORE_FILE_NAME } from "./constants"
 import { StoreProps } from "./types";
 
-// TODO: Eventually this will retrieve from an S3 bucket.
 export const retrieve = () => {
-  return retrieveJsonFromFile<StoreProps>(STORE_FILE_NAME);
+  return retrieveJsonFromS3<StoreProps>(STORE_FILE_NAME);
 };
