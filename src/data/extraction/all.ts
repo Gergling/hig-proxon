@@ -1,10 +1,10 @@
 import 'dotenv/config';
-import { DTOProps } from "../types";
-import { extractGymSet, extractGymTripLog } from "./extractions";
-import { extractExerciseEquipment } from "./extractions/exercise-equipment";
-import { extractExercises } from "./extractions/exercises";
-import { extractGymSetStrategy } from "./extractions/gym-set-strategy";
-import { extractMuscleGroups } from "./extractions/muscle-groups";
+import { DTOProps } from "../../types";
+import { extractGymSet, extractGymTripLog } from "../../extract/extractions";
+import { extractExerciseEquipment } from "../../extract/extractions/exercise-equipment";
+import { extractExercises } from "../../extract/extractions/exercises";
+import { extractGymSetStrategy } from "../../extract/extractions/gym-set-strategy";
+import { extractMuscleGroups } from "../../extract/extractions/muscle-groups";
 
 export const extractAll = async (): Promise<DTOProps> => {
   const notionSecret = process.env.NOTION_TS_CLIENT_NOTION_SECRET;

@@ -2,7 +2,7 @@
 import 'dotenv/config'; // Loads .env file
 import express from 'express';
 import cors from 'cors';
-import { retrieveGymData } from './controllers';
+import { addGymTrip, retrieveGymData } from './controllers';
 import { initialiseCache } from './data/load/cache';
 
 const app = express();
@@ -34,6 +34,7 @@ app.use(cors({
 app.use(express.json());
 
 // Endpoint to proxy Notion database queries
+app.post('/notion-webhook', addGymTrip);
 app.get('/proxy-gym', retrieveGymData);
 
 console.log('Starting the server...')
@@ -42,7 +43,7 @@ console.log('Starting the server...')
 initialiseCache().then(() => {
   console.log('Cache initialised.')
   app.listen(port, () => {
-    console.log(`Notion Proxy Server listening at http://localhost:${port}`);
+    console.log(`Notion Proxy Server listening on port ${port}`);
     console.log(`Allowed Origins: ${allowedOrigins.join(', ') || 'None configured (allowing same-origin & non-browser requests)'}`);
   });
 }).catch((error) => {

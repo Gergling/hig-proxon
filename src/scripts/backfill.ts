@@ -1,4 +1,4 @@
-import { extractAll } from "../extract";
+import { extractAll } from "../data";
 import { store } from "../data/load";
 import { transformAll } from "../transformations/transform-all";
 
