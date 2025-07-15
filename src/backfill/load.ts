@@ -1,4 +1,4 @@
-import { store } from "../load";
+import { store } from "../data/load";
 import { GymTripProps, MuscleGroup } from "../types";
 
 export const load = async ({
