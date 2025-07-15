@@ -1,30 +1,30 @@
-import { GymTripProps } from "../api-types";
+// Comments might be legit, but the file's a dud.
 
-export const getIndexes = (trips: GymTripProps[]) => {
-  const { process } = trips.reduce(({
-    process
-  }, trip) => {
-    // QAI: Skipping for this because it's 1.
-    // EMS: Exercise muscle score. Sets and sessions sum this.
-      // For 0.1: We can assume the threshold is 270 in a 3-week period.
-      // To begin with twe'll get these from the Notion DB, so the
-      // version should be considered 0.1-NTN until we make operations to
-      // update the database with appropriate scoring.
-    // MSI: Trip score maxed at 5.
-    // MAI: Product of MSI and trips in last 7 days. 
+// export const getIndexes = (trips: GymTripProps[]) => {
+//   const { process } = trips.reduce(({
+//     process
+//   }, trip) => {
+//     // QAI: Skipping for this because it's 1.
+//     // EMS: Exercise muscle score. Sets and sessions sum this.
+//       // For 0.1: We can assume the threshold is 270 in a 3-week period.
+//       // To begin with twe'll get these from the Notion DB, so the
+//       // version should be considered 0.1-NTN until we make operations to
+//       // update the database with appropriate scoring.
+//     // MSI: Trip score maxed at 5.
+//     // MAI: Product of MSI and trips in last 7 days. 
 
-    // The Process Index, which will be based on whether the individual
-    // set scores based on the hardcoded threshold.
-    // Minimum activity index is the mean of:
-      // The number of gym sessions in the week divided by 2 maxed at 1.
-      // The muscle score divided by 5 max at 1.
-    return {
-      process: 0,
-    }
-  }, {
-    process: 0,
-  });
-};
+//     // The Process Index, which will be based on whether the individual
+//     // set scores based on the hardcoded threshold.
+//     // Minimum activity index is the mean of:
+//       // The number of gym sessions in the week divided by 2 maxed at 1.
+//       // The muscle score divided by 5 max at 1.
+//     return {
+//       process: 0,
+//     }
+//   }, {
+//     process: 0,
+//   });
+// };
 
 // TODO: Need to think about how to balance the scoring system.
 // Ideally we'd keep call muscle score data here and then update the

@@ -4,7 +4,7 @@
 // import { transformAll } from '../../transformations/transform-all'; // Assuming this path
 // import { DTOProps } from '../../types/dto-props'; // Assuming this type exists
 
-import { retrieveJsonFromS3, storeJsonToS3 } from "./store";
+import { retrieveJsonFromS3, storeJsonToS3 } from "../../repositories/s3";
 
 const CACHE_FILE_KEY = 'gym_data.json'; // This will be the key (filename) in your S3 bucket
 
