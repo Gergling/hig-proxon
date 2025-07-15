@@ -6,7 +6,7 @@ export const addGymTrip = async (
   _: Request,
   res: Response
 ) => {
-  console.log(_, res)
+  console.log(_.headers)
   // try {
   //   const dtos = await extractAll();
   //   const data = transformAll(dtos);

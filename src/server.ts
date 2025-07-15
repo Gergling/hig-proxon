@@ -31,9 +31,10 @@ app.use(cors({
 }));
 
 // Middleware to parse JSON request bodies
+app.use('/notion-webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 
-// Endpoint to proxy Notion database queries
+// Routes
 app.post('/notion-webhook', addGymTrip);
 app.get('/proxy-gym', retrieveGymData);
 
