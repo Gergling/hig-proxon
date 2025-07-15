@@ -8,10 +8,11 @@
     "data:s3-test": "dotenv -- ts-node src/scripts/test-s3-storage.ts",
     "generate:notion-sdk": "npx notion-ts-client generate --sdk ./src/notion-sdk",
     "run:production": "node dist/server.js",
-    "run:dev": "ts-node src/server.ts",
+    "run:dev": "nodemon --exec ts-node src/server.ts",
     "start:nodemon": "nodemon",
-    "start": "npm run run:dev",
+    "start": "npm run run:production",
     "test": "jest",
+    "validate:type-check": "tsc --noEmit",
     "validate:unused": "knip"
   },
   "keywords": [],
