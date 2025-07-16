@@ -22,6 +22,33 @@ import { transformAll } from "../transformations/transform-all";
 //   // }
 // };
 
+const getRawBodyString = (req: Request) => {
+  const bodyContent = req.body;
+
+  // Type guard: Check if bodyContent is a Buffer
+  if (bodyContent instanceof Buffer) {
+    return JSON.parse(bodyContent.toString('utf8'));
+  } else if (typeof bodyContent === 'object' && bodyContent !== null) {
+    // Fallback for cases where express.json() might have run first
+    // or if it's an empty object {} from an empty body.
+    return bodyContent;
+  } else {
+    throw new Error('No raw body or unexpected body type.');
+  }
+}
+
+const getPayload = (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    return getRawBodyString(req);
+  } catch (parseError) {
+    console.error('Error parsing webhook payload JSON:', parseError);
+    res.status(400).json({ message: 'Bad Request: Invalid JSON payload.' });
+    return;
+  }
+}
 
 // This is your Express route handler function.
 // It will be called when Notion pings your webhook URL.
@@ -45,14 +72,15 @@ export const addGymTrip = async (
         return;
     }
 
-    let payload: any;
-    try {
-        payload = JSON.parse(rawBody.toString('utf8'));
-    } catch (parseError) {
-        console.error('Error parsing webhook payload JSON:', parseError);
-        res.status(400).json({ message: 'Bad Request: Invalid JSON payload.' });
-        return;
-    }
+    // let payload: any;
+    // try {
+    //     payload = JSON.parse(rawBody.toString('utf8'));
+    // } catch (parseError) {
+    //     console.error('Error parsing webhook payload JSON:', parseError);
+    //     res.status(400).json({ message: 'Bad Request: Invalid JSON payload.' });
+    //     return;
+    // }
+    const payload = getPayload(req, res);
 
     // --- TEMPORARY LOGGING FOR INITIAL WEBHOOK VERIFICATION TOKEN ---
     // This block is specifically for the one-time verification request from Notion.
