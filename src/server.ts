@@ -2,7 +2,7 @@
 import 'dotenv/config'; // Loads .env file
 import express from 'express';
 import cors from 'cors';
-import { addGymTrip, retrieveGymData } from './controllers';
+import { addGymTrip, healthCheck, retrieveGymData } from './controllers';
 import { initialiseCache } from './data/load/cache';
 
 const app = express();
@@ -33,6 +33,8 @@ app.use(cors({
 // Middleware to parse JSON request bodies
 
 // Routes
+app.get('/', healthCheck);
+app.post('/', express.raw({ type: 'application/json' }), healthCheck);
 app.post('/notion-webhook', express.raw({ type: 'application/json' }), addGymTrip);
 app.get('/proxy-gym', retrieveGymData);
 
