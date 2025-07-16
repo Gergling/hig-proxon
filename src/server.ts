@@ -31,12 +31,13 @@ app.use(cors({
 }));
 
 // Middleware to parse JSON request bodies
-app.use('/notion-webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
 
 // Routes
-app.post('/notion-webhook', addGymTrip);
+app.post('/notion-webhook', express.raw({ type: 'application/json' }), addGymTrip);
 app.get('/proxy-gym', retrieveGymData);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 console.log('Starting the server...')
 

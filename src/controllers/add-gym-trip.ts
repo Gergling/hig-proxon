@@ -41,7 +41,8 @@ export const addGymTrip = async (
 
     if (!rawBody) {
         console.error('Webhook received with empty raw body. Ensure express.raw() middleware is used for this route.');
-        return res.status(400).json({ message: 'Bad Request: Empty body or raw body not available.' });
+        res.status(400).json({ message: 'Bad Request: Empty body or raw body not available.' });
+        return;
     }
 
     let payload: any;
@@ -49,7 +50,8 @@ export const addGymTrip = async (
         payload = JSON.parse(rawBody.toString('utf8'));
     } catch (parseError) {
         console.error('Error parsing webhook payload JSON:', parseError);
-        return res.status(400).json({ message: 'Bad Request: Invalid JSON payload.' });
+        res.status(400).json({ message: 'Bad Request: Invalid JSON payload.' });
+        return;
     }
 
     // --- TEMPORARY LOGGING FOR INITIAL WEBHOOK VERIFICATION TOKEN ---
@@ -63,7 +65,8 @@ export const addGymTrip = async (
         console.log('----------------------------------------------------');
 
         // Notion expects a 200 OK response for verification requests
-        return res.status(200).json({ status: 'ok', message: 'Webhook verification token received.' });
+        res.status(200).json({ status: 'ok', message: 'Webhook verification token received.' });
+        return;
     }
     // --- END TEMPORARY LOGGING ---
 
@@ -74,13 +77,15 @@ export const addGymTrip = async (
     const notionSignature = req.headers['x-notion-signature'] as string;
     if (!notionSignature) {
         console.warn('Webhook received without X-Notion-Signature header. Possible unauthorized request.');
-        return res.status(401).json({ message: 'Unauthorized: Missing signature.' });
+        res.status(401).json({ message: 'Unauthorized: Missing signature.' });
+        return;
     }
 
     // 2. Compute the HMAC-SHA256 signature using your STORED secret
     if (!NOTION_WEBHOOK_SECRET) {
         console.error('NOTION_WEBHOOK_SECRET environment variable is not set. Cannot verify webhook signature.');
-        return res.status(500).json({ message: 'Server webhook secret not configured.' });
+        res.status(500).json({ message: 'Server webhook secret not configured.' });
+        return;
     }
     const hmac = createHmac('sha256', NOTION_WEBHOOK_SECRET);
     hmac.update(rawBody); // Use the rawBody for signature computation
@@ -89,7 +94,8 @@ export const addGymTrip = async (
     // 3. Compare the signatures
     if (computedSignature !== notionSignature) {
         console.warn('Webhook signature mismatch. Possible unauthorized request.');
-        return res.status(403).json({ message: 'Forbidden: Invalid signature.' });
+        res.status(403).json({ message: 'Forbidden: Invalid signature.' });
+        return;
     }
 
     console.log('Webhook received and signature verified!');
@@ -114,6 +120,7 @@ export const addGymTrip = async (
         // await refreshAndStoreCache(rawNotionDTOs); // This updates S3 and in-memory cache
 
         res.status(200).json({ message: 'Webhook received and cache refresh initiated.' });
+        return;
     } catch (e: any) {
         console.error('Error processing Notion webhook event:', e);
         // Pass the error to your global error handling middleware
