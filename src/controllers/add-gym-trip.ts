@@ -22,27 +22,22 @@ import { transformAll } from "../transformations/transform-all";
 //   // }
 // };
 
-const getRawBodyString = (req: Request) => {
+const getRawBodyString = (req: Request): string => {
   const bodyContent = req.body;
 
-  // Type guard: Check if bodyContent is a Buffer
   if (bodyContent instanceof Buffer) {
-    return JSON.parse(bodyContent.toString('utf8'));
-  } else if (typeof bodyContent === 'object' && bodyContent !== null) {
-    // Fallback for cases where express.json() might have run first
-    // or if it's an empty object {} from an empty body.
-    return bodyContent;
-  } else {
-    throw new Error('No raw body or unexpected body type.');
+    return bodyContent.toString('utf8');
   }
+
+  return bodyContent;
 }
 
 const getPayload = (
-  req: Request,
+  rawBodyString: string,
   res: Response,
 ) => {
   try {
-    return getRawBodyString(req);
+    return JSON.parse(rawBodyString);
   } catch (parseError) {
     console.error('Error parsing webhook payload JSON:', parseError);
     res.status(400).json({ message: 'Bad Request: Invalid JSON payload.' });
@@ -64,7 +59,7 @@ export const addGymTrip = async (
     const NOTION_API_TOKEN = process.env.NOTION_API_TOKEN; // Your main Notion API secret
 
     // Ensure rawBody is available from express.raw() middleware
-    const rawBody = (req as any).rawBody;
+    const rawBody = getRawBodyString(req);
 
     if (!rawBody) {
         console.error('Webhook received with empty raw body. Ensure express.raw() middleware is used for this route.');
@@ -80,7 +75,7 @@ export const addGymTrip = async (
     //     res.status(400).json({ message: 'Bad Request: Invalid JSON payload.' });
     //     return;
     // }
-    const payload = getPayload(req, res);
+    const payload = getPayload(rawBody, res);
 
     // --- TEMPORARY LOGGING FOR INITIAL WEBHOOK VERIFICATION TOKEN ---
     // This block is specifically for the one-time verification request from Notion.
