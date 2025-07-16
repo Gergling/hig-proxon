@@ -76,6 +76,7 @@ export const addGymTrip = async (
     //     return;
     // }
     const payload = getPayload(rawBody, res);
+    console.log(payload)
 
     // --- TEMPORARY LOGGING FOR INITIAL WEBHOOK VERIFICATION TOKEN ---
     // This block is specifically for the one-time verification request from Notion.
