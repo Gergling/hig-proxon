@@ -1,4 +1,4 @@
-import { ExercisesResponseDTO } from "../../notion-sdk/dbs/exercises";
+import { ExercisesResponseDTO } from "../../../notion-sdk/dbs/exercises";
 import { getNameProperty } from "./get-name-property";
 
 export const getExercise = ({

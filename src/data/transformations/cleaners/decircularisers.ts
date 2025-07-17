@@ -1,4 +1,4 @@
-import { GymExercise, GymExerciseSet, GymTripProps, MuscleGroup } from "../../types";
+import { GymExercise, GymExerciseSet, GymTripProps, MuscleGroup } from "../../../types";
 
 const getNonCircularExercise = (
   exercise: GymExercise

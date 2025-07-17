@@ -1,7 +1,7 @@
 // TODO: Comments are legit, but this file isn't done.
 
-import { DTOProps, GymTripProps, MuscleGroup } from "../types";
-import { getCurrentUtcInstant, instantToISOString } from "../utils/time-helpers";
+import { DTOProps, GymTripProps, MuscleGroup } from "../../types";
+import { getCurrentUtcInstant, instantToISOString } from "../../utils/time-helpers";
 import { getNonCircularMuscleGroup, getNonCircularTrip } from "./cleaners";
 import { getGymData } from "./get-gym-data";
 

@@ -1,12 +1,12 @@
 import { Temporal } from "temporal-polyfill";
-import { getSetValidityStatus } from "../gym-trips/get-set-validity-status";
-import { GymSetResponseDTO } from "../notion-sdk/dbs/gym-set";
-import { DTOProps, GymExerciseSet, GymTripProps } from "../types";
+import { getSetValidityStatus } from "../../gym-trips/get-set-validity-status";
+import { GymSetResponseDTO } from "../../notion-sdk/dbs/gym-set";
+import { DTOProps, GymExerciseSet, GymTripProps } from "../../types";
 import { getExercises } from "./get-exercises";
 import { getSetProgressionTracker } from "./utils/get-set-progression-tracker";
 import { getSetWithProgression } from "./utils/get-set-with-progression";
 import { getSetListReport } from "./utils/get-set-list-report";
-import { getExerciseSetLookup, getStrategyLookup } from "../lookups";
+import { getExerciseSetLookup, getStrategyLookup } from "../../lookups";
 
 export const getGymData = (dtos: DTOProps) => {
   const {

@@ -1,4 +1,4 @@
-import { GymExerciseSet } from "../../types";
+import { GymExerciseSet } from "../../../types";
 import { getSetValidityComparison } from "./get-set-validity-comparison";
 
 export const getBestSet = (

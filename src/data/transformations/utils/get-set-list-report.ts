@@ -1,4 +1,4 @@
-import { GymExerciseSet, SetProgressionStatus } from "../../types";
+import { GymExerciseSet, SetProgressionStatus } from "../../../types";
 import { getSplicedStatuses } from "./get-spliced-statuses";
 
 export const getSetListReport = (sets: GymExerciseSet[]) => {

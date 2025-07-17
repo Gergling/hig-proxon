@@ -1,4 +1,4 @@
-import { SetValidityStatus } from "../../types";
+import { SetValidityStatus } from "../../../types";
 
 const validities: SetValidityStatus[] = ['zero', 'invalid', 'valid'];
 const getValidityIndex = (needle: SetValidityStatus): number =>

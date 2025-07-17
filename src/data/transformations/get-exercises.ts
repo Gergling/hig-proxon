@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
-import { getRelatedById } from "../common/utils";
-import { getEquipmentLookup, getMuscleGroupLookup } from "../lookups";
-import { DTOProps, ExerciseMuscleGroup, GymExercise, GymExerciseSet, MuscleGroup } from "../types";
+import { getRelatedById } from "../../common/utils";
+import { getEquipmentLookup, getMuscleGroupLookup } from "../../lookups";
+import { DTOProps, ExerciseMuscleGroup, GymExercise, GymExerciseSet, MuscleGroup } from "../../types";
 import { getExercise } from "./dto";
 
 export const getExercises = ({

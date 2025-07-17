@@ -1,5 +1,5 @@
-import { mockGymExerciseSet } from "../../gym-trips/mock-data";
-import { GymExerciseSet, SetProgressionStatus } from "../../types";
+import { mockGymExerciseSet } from "../../../gym-trips/mock-data";
+import { GymExerciseSet, SetProgressionStatus } from "../../../types";
 import { getTripProgressionStatus } from "./get-trip-progression-status";
 
 const getMockSet = (status?: SetProgressionStatus): GymExerciseSet => {

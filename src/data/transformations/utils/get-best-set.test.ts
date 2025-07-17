@@ -1,5 +1,5 @@
-import { mockGymExerciseSet } from "../../gym-trips/mock-data";
-import { GymExerciseSet } from "../../types";
+import { mockGymExerciseSet } from "../../../gym-trips/mock-data";
+import { GymExerciseSet } from "../../../types";
 import { getBestSet } from "./get-best-set";
 
 const mockSetZero: GymExerciseSet = {

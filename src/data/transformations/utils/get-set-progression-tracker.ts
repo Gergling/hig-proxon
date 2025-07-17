@@ -1,5 +1,5 @@
 import { Temporal } from "temporal-polyfill";
-import { GymExerciseSet, ExerciseSetProgression } from "../../types";
+import { GymExerciseSet, ExerciseSetProgression } from "../../../types";
 import { getBestSet } from "./get-best-set";
 
 type ProgressionWithDate = {

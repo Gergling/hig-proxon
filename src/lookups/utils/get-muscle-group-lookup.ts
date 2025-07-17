@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import { getLookup } from "../../common/utils";
 import { MuscleGroupsResponseDTO } from "../../notion-sdk/dbs/muscle-groups";
-import { getMuscleGroup } from "../../transformations";
+import { getMuscleGroup } from "../../data/transformations";
 import { GymExerciseSet, MuscleGroup, MuscleGroupSetActivity } from "../../types";
 
 export const getMuscleGroupLookup = (

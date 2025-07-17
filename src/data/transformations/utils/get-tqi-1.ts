@@ -1,4 +1,4 @@
-import { GymExerciseSet } from "../../types";
+import { GymExerciseSet } from "../../../types";
 
 export const getTQI1 = (sets: GymExerciseSet[]) => {
   if (sets.length === 0) return 0;

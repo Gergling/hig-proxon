@@ -1,4 +1,4 @@
-import { SetProgressionStatus } from "../../types";
+import { SetProgressionStatus } from "../../../types";
 
 const statuses: SetProgressionStatus[] = [
   'growth',

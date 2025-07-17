@@ -1,4 +1,4 @@
-import { MuscleGroupsResponseDTO } from "../../notion-sdk/dbs/muscle-groups";
+import { MuscleGroupsResponseDTO } from "../../../notion-sdk/dbs/muscle-groups";
 import { getNameProperty } from "./get-name-property";
 
 export const getMuscleGroup = ({

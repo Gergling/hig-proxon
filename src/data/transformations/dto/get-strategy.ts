@@ -1,5 +1,5 @@
-import { GymSetStrategyResponseDTO } from "../../notion-sdk/dbs/gym-set-strategy";
-import { GymSetStrategy } from "../../types";
+import { GymSetStrategyResponseDTO } from "../../../notion-sdk/dbs/gym-set-strategy";
+import { GymSetStrategy } from "../../../types";
 import { getNameProperty } from "./get-name-property";
 
 export const getStrategy = ({

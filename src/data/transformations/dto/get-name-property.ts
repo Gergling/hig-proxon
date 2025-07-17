@@ -1,4 +1,4 @@
-import { RichTextItemResponse } from "../../notion-sdk/core/types/notion-api.types";
+import { RichTextItemResponse } from "../../../notion-sdk/core/types/notion-api.types";
 
 export const getNameProperty = ({ text }: {
   // TODO: Obviously these types aren't being used, but TBH I can't tell

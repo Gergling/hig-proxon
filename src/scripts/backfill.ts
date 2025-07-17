@@ -1,6 +1,6 @@
 import { extractAll } from "../data";
 import { store } from "../data/load";
-import { transformAll } from "../transformations/transform-all";
+import { transformAll } from "../data/transformations/transform-all";
 
 export const backfill = async () => {
   try {

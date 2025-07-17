@@ -1,7 +1,7 @@
 import { createHmac } from 'crypto'; // Node.js built-in crypto module
 import { NextFunction, Request, Response } from "express";
 import { extractAll, store } from "../data";
-import { transformAll } from "../transformations/transform-all";
+import { transformAll } from "../data/transformations/transform-all";
 
 // export const addGymTrip = async (
 //   _: Request,

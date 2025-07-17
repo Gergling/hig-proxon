@@ -4,8 +4,8 @@
 // 2 each is 4, I guess.
 
 import { Temporal } from "temporal-polyfill";
-import { mockGymExercise, mockGymExerciseSet, mockGymSetStrategy } from "../../gym-trips/mock-data";
-import { GymExercise, GymExerciseSet, ExerciseSetProgression, GymSetStrategy } from "../../types";
+import { mockGymExercise, mockGymExerciseSet, mockGymSetStrategy } from "../../../gym-trips/mock-data";
+import { GymExercise, GymExerciseSet, ExerciseSetProgression, GymSetStrategy } from "../../../types";
 import { getSetProgressionTracker } from "./get-set-progression-tracker";
 
 // We want our first trip to include sets for the benchmark.

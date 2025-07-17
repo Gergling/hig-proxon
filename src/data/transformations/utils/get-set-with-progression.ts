@@ -1,5 +1,5 @@
-import { getSetProgressionStatus } from "../../gym-trips/get-set-progression-status";
-import { ExerciseSetProgression, GymExerciseSet } from "../../types";
+import { getSetProgressionStatus } from "../../../gym-trips/get-set-progression-status";
+import { ExerciseSetProgression, GymExerciseSet } from "../../../types";
 
 export const getSetWithProgression = (
   set: GymExerciseSet,

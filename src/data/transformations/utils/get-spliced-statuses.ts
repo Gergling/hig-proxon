@@ -1,4 +1,4 @@
-import { SetProgressionStatus } from "../../types";
+import { SetProgressionStatus } from "../../../types";
 import { getProgressionStatusComparison } from "./get-progression-status-comparison";
 
 const initialProgressionStatuses: SetProgressionStatus[] = [];
