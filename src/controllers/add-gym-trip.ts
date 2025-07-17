@@ -76,12 +76,11 @@ export const addGymTrip = async (
     //     return;
     // }
     const payload = getPayload(rawBody, res);
-    console.log(payload)
 
     // --- TEMPORARY LOGGING FOR INITIAL WEBHOOK VERIFICATION TOKEN ---
     // This block is specifically for the one-time verification request from Notion.
-    if (payload.type === 'webhook.verification') {
-        const verificationToken = payload.token;
+    if (payload.verification_token) {
+        const verificationToken = payload.verification_token;
         console.log('----------------------------------------------------');
         console.log('!!! NOTION WEBHOOK VERIFICATION TOKEN FOUND !!!');
         console.log('!!! COPY THIS TOKEN AND SAVE IT AS NOTION_WEBHOOK_SECRET IN YOUR .env / RENDER VARS !!!');
