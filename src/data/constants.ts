@@ -1,4 +1,4 @@
-import { ViewProcessDeadlineStatusLabels } from "../types";
+import { ViewProcessDeadlineStatusLabels } from "./types";
 
 export const DEADLINE_STATUS_LABELS: ViewProcessDeadlineStatusLabels = {
   'dormant': 'Dormant',
