@@ -1,6 +1,6 @@
 import { mockGymExerciseSet } from "../../../gym-trips/mock-data";
 import { GymExerciseSet, SetProgressionStatus } from "../../../types";
-import { getTripProgressionStatus } from "./get-trip-progression-status";
+import { getTripProgressionStatus, reduceSetProgressionStatuses } from "./get-trip-progression-status";
 
 const getMockSet = (status?: SetProgressionStatus): GymExerciseSet => {
   if (!status) return mockGymExerciseSet;
@@ -15,6 +15,26 @@ const getMockSet = (status?: SetProgressionStatus): GymExerciseSet => {
     },
   }
 };
+
+describe('reduceSetProgressionStatuses', () => {
+  it('should insert the set progression status in the correct location in order if the set has progression', () => {
+    const initialStatuses: SetProgressionStatus[] = ['growth', 'rehab'];
+    const exerciseSet: GymExerciseSet = getMockSet('regrowth');
+
+    const result = reduceSetProgressionStatuses(initialStatuses, exerciseSet);
+
+    expect(result).toEqual(['growth', 'regrowth', 'rehab']);
+  });
+
+  it('should return the same statuses if the set has no progression status', () => {
+    const initialStatuses: SetProgressionStatus[] = ['growth', 'rehab'];
+    const exerciseSet: GymExerciseSet = getMockSet();
+
+    const result = reduceSetProgressionStatuses(initialStatuses, exerciseSet);
+
+    expect(result).toEqual(initialStatuses);
+  });
+});
 
 describe('getTripProgressionStatus', () => {
   it('should return undefined if there are no progressions in the sets', () => {
