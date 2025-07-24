@@ -1,19 +1,10 @@
 import { store } from "../data/load";
-import { GymTripProps, MuscleGroup } from "../types";
+import { View } from "../data/types";
 
-export const load = async ({
-  muscleGroups,
-  trips,
-}: {
-  muscleGroups: MuscleGroup[];
-  trips: GymTripProps[];
-}) => {
+export const load = async (data: View) => {
   console.log('+++ Loading...');
   try {
-    await store({
-      muscleGroups,
-      trips,
-    });
+    await store(data);
   } catch (e) {
     console.error('! Loading failed:', e);
     throw e;
