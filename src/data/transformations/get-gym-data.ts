@@ -6,13 +6,15 @@ import { getExercises } from "./get-exercises";
 import { getSetProgressionTracker } from "./utils/get-set-progression-tracker";
 import { getSetWithProgression } from "./utils/get-set-with-progression";
 import { getSetListReport } from "./utils/get-set-list-report";
-import { getExerciseSetLookup, getStrategyLookup } from "../../lookups";
+import { getExerciseSetLookup, getStrategyLookup } from "../lookups";
 
 export const getGymData = (dtos: DTOProps) => {
   const {
-    addMuscleGroupActivity,
-    getMuscleGroups,
+    addActivity,
+    getBreakdown: getExerciseBreakdown,
     getExerciseById,
+    getMuscleGroups,
+    ...exerciseFunctions
   } = getExercises(dtos);
   const {
     sets: setDTOs,
@@ -32,6 +34,10 @@ export const getGymData = (dtos: DTOProps) => {
       units: { name: units },
     },
   }: GymSetResponseDTO): GymExerciseSet => {
+    // TODO: The exercises and gym strategies CAN be empty.
+    // Ideally we should at least output a console log here.
+    // Ultimately though, we should be flagging the record in Notion
+    // with a data impurity.
     const strategy = getStrategyById(strategyId);
     if (!strategy) throw new Error(`No strategy for id '${strategyId}' found.`);
     const exercise = getExerciseById(exerciseId);
@@ -81,17 +87,12 @@ export const getGymData = (dtos: DTOProps) => {
       const setWithProgression = getSetWithProgression(setWithoutProgression, progression);
 
       // Add this set to the muscle group activity.
-      addMuscleGroupActivity(setWithProgression, visitDate);
+      addActivity(setWithProgression, visitDate);
 
       return setWithProgression;
     });
 
-    // TODO: Get set EMS status.
-    // TODO: Also get trip TQI.
-    // TODO: Consider making a function which loops all these completed sets
-    // to get report information.
-    // const tqi = getTQI1();
-    // const status = getTripProgressionStatus(sets);
+    // TODO: This function is an aggregator and should be categorised as such.
     const {
       ems,
       status,
@@ -113,8 +114,8 @@ export const getGymData = (dtos: DTOProps) => {
   });
 
   return {
-    // equipment,
-    // exercises,
+    ...exerciseFunctions,
+    getExerciseBreakdown,
     getMuscleGroups,
     gymTrips,
   };

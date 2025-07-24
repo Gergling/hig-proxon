@@ -1,6 +1,6 @@
 import { getLookup } from "../../common/utils";
 import { GymSetStrategyResponseDTO } from "../../notion-sdk/dbs/gym-set-strategy";
-import { getStrategy } from "../../data/transformations";
+import { getStrategy } from "../transformations";
 import { GymSetStrategy } from "../../types";
 
 export const getStrategyLookup = (

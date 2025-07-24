@@ -1,4 +1,5 @@
 import { Temporal } from "temporal-polyfill";
+import { RecencyBiasCriteria } from "../data/types/recency-bias";
 
 /**
  * Returns the current point in time as a Temporal.Instant.
@@ -32,32 +33,61 @@ export function instantFromISOString(isoString: string): Temporal.Instant {
   return Temporal.Instant.from(isoString);
 }
 
-// --- Example Usage ---
-/*
-(async () => {
-    // Get the current instant
-    const now = getCurrentUtcInstant();
-    console.log('Current UTC Instant:', now.toString()); // e.g., 2024-07-15T17:56:00.123456789Z
+export const getRecencyBiasedThresholds = (
+  criteria: RecencyBiasCriteria[],
+  benchmarkDate: Temporal.PlainDate,
+): Temporal.PlainDate[] => criteria
+  .map((criterion) => benchmarkDate.subtract(criterion))
+  .sort(Temporal.PlainDate.compare);
 
-    // Simulate storing it
-    const storedString = instantToISOString(now);
-    console.log('Stored as string:', storedString);
+type DateCallback<T> = (date: Temporal.PlainDate) => T;
+/**
+ * Takes an array of dates which must be sorted from oldest to newest,
+ * a date to compare with which represents the "current" or "latest"
+ * date.
+ * 
+ *
+ * @param {Temporal.PlainDate[]} thresholdDates An array of dates which must be sorted from oldest to newest.
+ * @param {Temporal.PlainDate} date A date to compare against.
+ * @param {DateCallback} callback A date to compare against.
+ * @returns {Temporal.Instant} The parsed Temporal.Instant.
+ */
+export const runDateCallback = (
+  thresholdDates: Temporal.PlainDate[],
+  date: Temporal.PlainDate,
+  callback: DateCallback<void>,
+): void => {
+  for (let i in thresholdDates) {
+    const thresholdDate = thresholdDates[i];
+    // If we get to the point where the date is not within the threshold,
+    // we are done here. This is because the thresholds are in order of
+    // oldest to newest, so this date will not apply to further criteria.
+    if (Temporal.PlainDate.compare(thresholdDate, date) < 0) return;
 
-    // Simulate retrieving and parsing it later
-    const retrievedInstant = instantFromISOString(storedString);
-    console.log('Retrieved Instant:', retrievedInstant.toString());
+    // Otherwise, we are within the threshold. Add the day of week to
+    // the array for the criteria.
+    callback(thresholdDate);
+  }
+};
+// type Mapped = {
+//   [key: string]: unknown;
+// } | undefined;
+// export const getDateThresholdMap = <T extends Mapped>(
+//   thresholdDates: Temporal.PlainDate[],
+//   date: Temporal.PlainDate,
+//   callback: DateCallback<T>,
+// ): T | undefined => {
+//   let output: T = undefined;
+//   for (let i in thresholdDates) {
+//     const thresholdDate = thresholdDates[i];
+//     // If we get to the point where the date is not within the threshold,
+//     // we are done here. This is because the thresholds are in order of
+//     // oldest to newest, so this date will not apply to further criteria.
+//     if (Temporal.PlainDate.compare(thresholdDate, date) < 0) return output;
 
-    // Verify they are the same point in time
-    console.log('Are they equal?', now.equals(retrievedInstant)); // Should be true
-
-    // Demonstrate how it's timezone-agnostic:
-    // If you were to display this instant in a specific timezone:
-    const londonTime = now.toZonedDateTimeISO('Europe/London');
-    console.log('London Time:', londonTime.toString()); // Will show local time + offset
-
-    const newYorkTime = now.toZonedDateTimeISO('America/New_York');
-    console.log('New York Time:', newYorkTime.toString()); // Will show local time + offset
-
-    // All these ZonedDateTimes represent the SAME Instant, just viewed from different timezones.
-})();
-*/
+//     // Otherwise, we are within the threshold. Add the day of week to
+//     // the array for the criteria.
+//     output = callback(thresholdDate);
+//   }
+//   return output;
+// };

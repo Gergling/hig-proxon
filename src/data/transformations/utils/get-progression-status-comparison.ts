@@ -1,19 +1,12 @@
+import { getMappedOrderArray } from "../../../common/utils/get-mapped-order-array";
+import { allSetProgressionStatuses } from "../../../constants/gym";
 import { SetProgressionStatus } from "../../../types";
 
-const statuses: SetProgressionStatus[] = [
-  'growth',
-  'regrowth',
-  'uptick',
-  'steady',
-  'fluctuation',
-  'backslide',
-  'rehab',
-];
-
-const statusMapping = statuses.reduce((mapping, status, idx) => ({
-  ...mapping,
-  [status]: idx,
-}), {} as { [idx in SetProgressionStatus]: number; });
+const statusMapping = getMappedOrderArray(allSetProgressionStatuses);
+// const statusMapping = allSetProgressionStatuses.reduce((mapping, status, idx) => ({
+//   ...mapping,
+//   [status]: idx,
+// }), {} as { [idx in SetProgressionStatus]: number; });
 
 export const getProgressionStatusComparison = (
   a: SetProgressionStatus,

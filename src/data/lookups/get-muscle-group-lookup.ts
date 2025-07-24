@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import { getLookup } from "../../common/utils";
 import { MuscleGroupsResponseDTO } from "../../notion-sdk/dbs/muscle-groups";
-import { getMuscleGroup } from "../../data/transformations";
+import { getMuscleGroup } from "../transformations";
 import { GymExerciseSet, MuscleGroup, MuscleGroupSetActivity } from "../../types";
 
 export const getMuscleGroupLookup = (
@@ -17,6 +17,7 @@ export const getMuscleGroupLookup = (
     dtos,
     (dto: MuscleGroupsResponseDTO): MuscleGroup => ({
       activity: [],
+      exercises: [],
       ...getMuscleGroup(dto),
     }),
     { id: (dto: MuscleGroupsResponseDTO) => dto.id },

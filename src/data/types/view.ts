@@ -1,36 +1,47 @@
 import { Temporal } from "temporal-polyfill";
 import { SetProgressionStatus } from "../../types";
 
-type ViewAggregatedSetProgressionStatus = SetProgressionStatus | 'none';
+export type ViewAggregatedSetProgressionStatus = SetProgressionStatus | 'none';
+
+export type ProposedProp = 'priority' | 'supplemental';
 
 type ViewExerciseMuscleGroup = {
   activity: number;
   name: string;
 };
 
-type ViewExerciseItem = {
-  activity: {
-    exercise: number;
-    muscleGroups: number;
-  };
+export type ViewExerciseItem = {
+  ems0ntn: number;
+  exerciseId: string;
+  exerciseName: string;
   muscleGroups: ViewExerciseMuscleGroup[];
-  name: string;
 };
 
-type ViewExerciseBreakdown = {
+export type ProposedProps = {
+  [key in ProposedProp]: ViewExerciseItem[];
+};
+
+export type ViewExerciseBreakdown = {
   // The exercises trained most frequently, and earliest in the week. Can be recency-biased from a total number of sets.
-  favourites: ViewExerciseItem[];
+  favourites: string[];
   // Assuming the favourites will be trained, what should be considered?
-  proposed: ViewExerciseItem[];
+  proposed: ProposedProps;
+  // Should ideally include ranking by high EMS, but also low EMS.
 };
 
-type ViewMuscleGroupBreakdown = {
+export type ViewMuscleGroupInterim = {
   activity: {
-    // This will be the EMS but in comparison to the total EMS for the week.
-    contribution: number;
     ems0ntn: number;
   };
+  name: string;
   status: ViewAggregatedSetProgressionStatus;
+};
+
+export type ViewMuscleGroup = ViewMuscleGroupInterim & {
+  activity: ViewMuscleGroupInterim['activity'] & {
+    // This will be the EMS but in comparison to the total EMS for the week.
+    contribution: number;
+  };
 };
 
 type ViewProcessDeadlineStatus =
@@ -46,20 +57,13 @@ export type ViewProcessDeadlineStatusLabels = {
   [key in ViewProcessDeadlineStatus]: string;
 };
 
-type ViewVisit = {
+export type ViewVisit = {
   date: Temporal.PlainDate;
   ems0ntn: number;
-  status: SetProgressionStatus;
+  status: SetProgressionStatus | undefined;
 };
 
-type ViewProcessDeadline = {
-  date?: Temporal.PlainDate;
-  status: ViewProcessDeadlineStatus;
-  statusLabel: string;
-};
-
-type ViewProcess = {
-  deadline: ViewProcessDeadline;
+export type ViewProcess = {
   ems0ntn: number;
   status: ViewAggregatedSetProgressionStatus;
   visits: ViewVisit[];
@@ -67,6 +71,7 @@ type ViewProcess = {
 
 export type View = {
   exercise: ViewExerciseBreakdown;
-  muscles: ViewMuscleGroupBreakdown;
+  lastUpdatedTime: string;
+  muscles: ViewMuscleGroup[];
   process: ViewProcess;
 };

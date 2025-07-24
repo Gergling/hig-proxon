@@ -1,6 +1,6 @@
 import { getLookup } from "../../common/utils";
 import { ExerciseEquipmentResponseDTO } from "../../notion-sdk/dbs/exercise-equipment";
-import { getEquipment } from "../../data/transformations";
+import { getEquipment } from "../transformations";
 import { Equipment } from "../../types";
 
 export const getEquipmentLookup = (
