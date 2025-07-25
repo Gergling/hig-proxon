@@ -40,7 +40,7 @@ export const getViewMuscleGroup = (
     status: 'none',
   };
 
-  const date7DaysPrior = mostRecentDate.subtract('7 days');
+  const date7DaysPrior = mostRecentDate.subtract({ days: 7 });
   const {
     ems0ntn,
     statuses,
