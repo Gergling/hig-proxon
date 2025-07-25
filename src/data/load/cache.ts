@@ -1,19 +1,20 @@
-import { Temporal } from "temporal-polyfill";
 import { retrieve } from "./retrieve";
-import { StoreProps } from "./types";
 import { getCurrentUtcInstant, instantToISOString } from "../../utils/time-helpers";
+import { View } from "../types";
 
-export let gymData: StoreProps | null;
+type LastUpdatedTimeProp = 'lastUpdatedTime';
+
+type Cached = {
+  [key in LastUpdatedTimeProp]: View[key];
+} & Partial<Omit<View, LastUpdatedTimeProp>>;
+
+export let gymData: Cached;
 
 export const initialiseCache = async () => {
-  // const response = await retrieve();
-  const empty: StoreProps = {
-    muscleGroups: [],
-    trips: [],
-  };
-  const response = {
-    ...empty,
-    lastUpdated: instantToISOString(getCurrentUtcInstant()),
+  const data = await retrieve();
+  const response: Cached = {
+    ...data,
+    lastUpdatedTime: instantToISOString(getCurrentUtcInstant()),
   };
   gymData = response;
   return response;

@@ -1,7 +1,7 @@
 import { retrieveJsonFromS3 } from "../../repositories/s3/retrieve-from-s3";
+import { View } from "../types";
 import { STORE_FILE_NAME } from "./constants"
-import { StoreProps } from "./types";
 
 export const retrieve = () => {
-  return retrieveJsonFromS3<StoreProps>(STORE_FILE_NAME);
+  return retrieveJsonFromS3<View>(STORE_FILE_NAME);
 };
