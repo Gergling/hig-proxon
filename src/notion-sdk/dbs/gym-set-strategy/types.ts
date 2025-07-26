@@ -20,7 +20,7 @@ export interface GymSetStrategyResponse extends WithOptional<Omit<DatabaseObject
   properties: {
     "Minimum Reps": NumberPropertyItemObjectResponse,
     "Maximum Reps": NumberPropertyItemObjectResponse,
-    "Colour": Omit<SelectPropertyItemObjectResponse, 'select'> & { select: { id: StringRequest, name: '🟩', color: 'green' } | { id: StringRequest, name: '🟨', color: 'yellow' } | { id: StringRequest, name: '🟥', color: 'red' } | { id: StringRequest, name: '🟦', color: 'blue' }},
+    "Colour": Omit<SelectPropertyItemObjectResponse, 'select'> & { select: { id: StringRequest, name: '🟪', color: 'purple' } | { id: StringRequest, name: '🟦', color: 'blue' } | { id: StringRequest, name: '🟩', color: 'green' } | { id: StringRequest, name: '🟨', color: 'yellow' } | { id: StringRequest, name: '🟧', color: 'orange' } | { id: StringRequest, name: '🟥', color: 'red' }},
     "Gym Set": RelationPropertyItemObjectResponse,
     "Name": TitlePropertyItemObjectResponse
   }

@@ -1,9 +1,11 @@
 export const GYM_SET_STRATEGY_PROP_VALUES = {
 "colour": [
+  "🟪",
+  "🟦",
   "🟩",
   "🟨",
-  "🟥",
-  "🟦"
+  "🟧",
+  "🟥"
 ] as const,
 }
 

@@ -19,7 +19,7 @@ import { MUSCLE_GROUPS_PROPS_TO_IDS } from './constants'
 
 export interface MuscleGroupsResponse extends WithOptional<Omit<DatabaseObjectResponse, 'properties'>, 'title'| 'description'| 'is_inline'| 'url'| 'public_url'> {
   properties: {
-    "30-Day Activity ": FormulaPropertyItemObjectResponse,
+    "14-Day Activity ": FormulaPropertyItemObjectResponse,
     "🤸🏻‍♂️ Exercises Stability ": RelationPropertyItemObjectResponse,
     "Exercises Primary ": RelationPropertyItemObjectResponse,
     "(WIP?) Priority": NumberPropertyItemObjectResponse,

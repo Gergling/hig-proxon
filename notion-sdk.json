@@ -68,7 +68,7 @@
           "readOnly": false
         },
         "%60%5CTO": {
-          "_name": "Action: Rehab",
+          "_name": "Action: 6 Sets",
           "_type": "button",
           "varName": "actionRehab",
           "readOnly": false
@@ -86,7 +86,7 @@
           "readOnly": false
         },
         "tqAu": {
-          "_name": "Action: Start",
+          "_name": "Action: Short",
           "_type": "button",
           "varName": "actionStart",
           "readOnly": false
@@ -113,6 +113,12 @@
           "_name": "Equipment Needed",
           "_type": "relation",
           "varName": "equipmentNeeded",
+          "readOnly": false
+        },
+        "_~BR": {
+          "_name": "Action: Long",
+          "_type": "button",
+          "varName": "actionLong",
           "readOnly": false
         }
       }

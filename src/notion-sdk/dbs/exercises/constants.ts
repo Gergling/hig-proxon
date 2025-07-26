@@ -12,7 +12,8 @@ export const EXERCISES_PROPS_TO_IDS = {
   "muscleGroupScore": "vN%3Am",
   "primaryMuscleGroups": "xT%3Bk",
   "name": "title",
-  "equipmentNeeded": "mMKh"
+  "equipmentNeeded": "mMKh",
+  "actionLong": "_~BR"
 } as const
 export const EXERCISES_IDS_TO_PROPS = {
   "EAuY": "muscleGroup_30DayActivityScore",
@@ -25,7 +26,8 @@ export const EXERCISES_IDS_TO_PROPS = {
   "vN%3Am": "muscleGroupScore",
   "xT%3Bk": "primaryMuscleGroups",
   "title": "name",
-  "mMKh": "equipmentNeeded"
+  "mMKh": "equipmentNeeded",
+  "_~BR": "actionLong"
 } as const
 export const EXERCISES_PROPS_TO_TYPES = {
   "muscleGroup_30DayActivityScore": "formula",
@@ -38,7 +40,8 @@ export const EXERCISES_PROPS_TO_TYPES = {
   "muscleGroupScore": "formula",
   "primaryMuscleGroups": "relation",
   "name": "title",
-  "equipmentNeeded": "relation"
+  "equipmentNeeded": "relation",
+  "actionLong": "button"
 } as const
 
   export type ExercisesDTOProperties = keyof typeof EXERCISES_PROPS_TO_IDS
