@@ -37,9 +37,9 @@ async function ensureDirectoryExists(dirPath: string): Promise<void> {
  * @param cacheDir Optional. The directory where the file should be saved. Defaults to 'cache/' in the project root.
  * @returns A Promise that resolves when the file has been successfully written.
  */
-export async function storeJsonToFile(
+export async function storeJsonToFile<T>(
     fileName: string,
-    data: any,
+    data: T,
     cacheDir: string = DEFAULT_CACHE_DIR
 ): Promise<void> {
     const filePath = path.join(cacheDir, fileName);
