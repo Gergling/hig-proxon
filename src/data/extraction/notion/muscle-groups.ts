@@ -1,5 +1,5 @@
-import { MuscleGroupsDatabase, MuscleGroupsQueryResponse, MuscleGroupsResponseDTO } from "../../notion-sdk/dbs/muscle-groups";
-import { createDbInstance, query } from "../core";
+import { MuscleGroupsDatabase, MuscleGroupsQueryResponse, MuscleGroupsResponseDTO } from "../../../notion-sdk/dbs/muscle-groups";
+import { createDbInstance, query } from "./";
 
 export const extractMuscleGroups = async (notionSecret: string) => {
   const db = createDbInstance(MuscleGroupsDatabase, notionSecret);

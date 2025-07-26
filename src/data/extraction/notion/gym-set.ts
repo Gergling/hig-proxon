@@ -1,5 +1,5 @@
-import { GymSetDatabase, GymSetQueryResponse, GymSetResponseDTO } from "../../notion-sdk/dbs/gym-set";
-import { createDbInstance, query } from "../core";
+import { GymSetDatabase, GymSetQueryResponse, GymSetResponseDTO } from "../../../notion-sdk/dbs/gym-set";
+import { createDbInstance, query } from "./";
 
 export const extractGymSet = async (notionSecret: string) => {
   const db = createDbInstance(GymSetDatabase, notionSecret);

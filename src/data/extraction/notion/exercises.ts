@@ -1,5 +1,5 @@
-import { ExercisesDatabase, ExercisesQueryResponse, ExercisesResponseDTO } from "../../notion-sdk/dbs/exercises";
-import { createDbInstance, query } from "../core";
+import { ExercisesDatabase, ExercisesQueryResponse, ExercisesResponseDTO } from "../../../notion-sdk/dbs/exercises";
+import { createDbInstance, query } from "./";
 
 export const extractExercises = async (notionSecret: string) => {
   const db = createDbInstance(ExercisesDatabase, notionSecret);
