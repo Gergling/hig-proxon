@@ -148,4 +148,53 @@ describe('query function', () => {
     expect(mockQueryFn).toHaveBeenCalledWith(undefined);
     expect(mockGetDTOs).not.toHaveBeenCalled(); // Should not be called if queryFn fails
   });
+
+  // --- Test Case 5: DTO mapping function omitted ---
+  test.skip('should paginate correctly and return all raw responses from multiple pages', async () => {
+    // Simulate three pages of data
+    mockQueryFn
+      .mockResolvedValueOnce({ // First page
+        has_more: true,
+        next_cursor: 'cursor1',
+        response: {
+            results: [{ id: 'page1', name: 'Item A' }, { id: 'page2', name: 'Item B' }],
+        },
+      })
+      .mockResolvedValueOnce({ // Second page
+        has_more: true,
+        next_cursor: 'cursor2',
+        response: {
+            results: [{ id: 'page3', name: 'Item C' }, { id: 'page4', name: 'Item D' }],
+        },
+      })
+      .mockResolvedValueOnce({ // Third (last) page
+        has_more: false,
+        next_cursor: null,
+        response: {
+            results: [{ id: 'page5', name: 'Item E' }],
+        },
+      });
+
+    const responses = await query(mockQueryFn, mockGetDTOs);
+
+    // Assertions
+    expect(mockQueryFn).toHaveBeenCalledTimes(3);
+    expect(mockQueryFn).toHaveBeenCalledWith(undefined); // First call
+    expect(mockQueryFn).toHaveBeenCalledWith('cursor1'); // Second call with cursor from first response
+    expect(mockQueryFn).toHaveBeenCalledWith('cursor2'); // Third call with cursor from second response
+
+    expect(mockGetDTOs).toHaveBeenCalledTimes(3);
+    expect(mockGetDTOs).toHaveBeenCalledWith(expect.objectContaining({ results: [{ id: 'page1', name: 'Item A' }, { id: 'page2', name: 'Item B' }] }));
+    expect(mockGetDTOs).toHaveBeenCalledWith(expect.objectContaining({ results: [{ id: 'page3', name: 'Item C' }, { id: 'page4', name: 'Item D' }] }));
+    expect(mockGetDTOs).toHaveBeenCalledWith(expect.objectContaining({ results: [{ id: 'page5', name: 'Item E' }] }));
+
+
+    expect(responses).toEqual([
+      { id: 'page1', displayName: 'ITEM A' },
+      { id: 'page2', displayName: 'ITEM B' },
+      { id: 'page3', displayName: 'ITEM C' },
+      { id: 'page4', displayName: 'ITEM D' },
+      { id: 'page5', displayName: 'ITEM E' },
+    ]);
+  });
 });

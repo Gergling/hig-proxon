@@ -1,5 +1,6 @@
 import { retrieveJsonFromFile, storeJsonToFile } from "../../common/file";
 import { View } from "../../data/types";
+import { ExtractionDbResponseProps } from "../../data/types/notion";
 import { DTOProps } from "../../types";
 
 const LOCAL_GYM_DATA_EXTRACTION = 'gym-data-extraction.json';
@@ -9,7 +10,7 @@ export const retrieveLocalGymExtractionData = () => {
   return retrieveJsonFromFile<DTOProps>(LOCAL_GYM_DATA_EXTRACTION);
 };
 
-export const storeLocalGymExtractionData = (data: DTOProps) => {
+export const storeLocalGymExtractionData = (data: ExtractionDbResponseProps) => {
   return storeJsonToFile(LOCAL_GYM_DATA_EXTRACTION, data);
 };
 

@@ -1,23 +1,10 @@
-import { MuscleGroupsDatabase, MuscleGroupsQueryResponse, MuscleGroupsResponseDTO } from "../../../notion-sdk/dbs/muscle-groups";
-import { createDbInstance, query } from "./";
+import { MuscleGroupsDatabase, MuscleGroupsResponseDTO } from "../../../notion-sdk/dbs/muscle-groups";
+import { configureNotionExtraction } from "./core";
 
-export const extractMuscleGroups = async (notionSecret: string) => {
-  const db = createDbInstance(MuscleGroupsDatabase, notionSecret);
-  return query<
-    MuscleGroupsQueryResponse,
-    MuscleGroupsResponseDTO
-  >(
-    async (start_cursor) => {
-      const response = await db.query({ start_cursor });
-      const { has_more, next_cursor } = response;
-      return {
-        has_more,
-        next_cursor,
-        response,
-      };
-    },
-    (queryResponse) => queryResponse
-      .results
-      .map((r) => new MuscleGroupsResponseDTO(r))
-  );
-};
+export const getMuscleGroupsDatabaseNotionExtraction = (
+  notionSecret: string
+) => configureNotionExtraction(
+  MuscleGroupsDatabase,
+  MuscleGroupsResponseDTO,
+  notionSecret,
+);
