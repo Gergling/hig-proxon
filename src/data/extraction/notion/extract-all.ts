@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { DTOProps } from '../../../types';
 import { DataDtoProps, ExtractionDbResponseProps, notionExtractionMapping } from '../../types/notion';
-import { configureNotionExtraction } from './core';
+import { NOTION_EXTRACTION_CONFIG } from './config';
 
 export const extractAll = async (
   local: boolean = false
@@ -12,25 +12,23 @@ export const extractAll = async (
     throw new Error('No NOTION_TS_CLIENT_NOTION_SECRET environment variable specified.');
   }
 
-  // I added this block to loop the extractions and run them.
+  // Loops extraction configs and runs them.
   const awaitingExtractions = Object
-    .entries(notionExtractionMapping)
-    .map(([key, { db: DbConstructor, dto: DtoContructor }]) => {
-      const {
+    .entries(NOTION_EXTRACTION_CONFIG)
+    .map(([
+      key,
+      {
         queryDTOs,
         queryResponses
-      } = configureNotionExtraction(
-        DbConstructor,
-        DtoContructor,
-        notionSecret
-      );
+      }
+    ]) => {
       const query = local ? queryResponses : queryDTOs;
       const name = key as keyof DTOProps;
       return new Promise<{
         name: keyof DTOProps;
         response: Awaited<ReturnType<typeof query>>;
       }>((resolve, reject) => {
-        query().then((response) => {
+        query(notionSecret).then((response) => {
           resolve({ name, response });
         });
       });

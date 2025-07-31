@@ -1,13 +1,12 @@
 import { retrieveJsonFromFile, storeJsonToFile } from "../../common/file";
 import { View } from "../../data/types";
 import { ExtractionDbResponseProps } from "../../data/types/notion";
-import { DTOProps } from "../../types";
 
 const LOCAL_GYM_DATA_EXTRACTION = 'gym-data-extraction.json';
 const LOCAL_GYM_DATA_TRANSFORMATION = 'gym-data-transformation.json';
 
 export const retrieveLocalGymExtractionData = () => {
-  return retrieveJsonFromFile<DTOProps>(LOCAL_GYM_DATA_EXTRACTION);
+  return retrieveJsonFromFile<ExtractionDbResponseProps>(LOCAL_GYM_DATA_EXTRACTION);
 };
 
 export const storeLocalGymExtractionData = (data: ExtractionDbResponseProps) => {

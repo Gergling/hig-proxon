@@ -8,61 +8,98 @@ import { MuscleGroupsDatabase, MuscleGroupsQueryResponse, MuscleGroupsResponseDT
 import { BaseConstructorFunction, DbQueryResponseType } from "../../types/utils";
 import { DatabaseConstructor } from "../extraction/types";
 
-type ExtractionMappingKeys =
-  | 'equipment'
-  | 'exercises'
-  | 'muscleGroups'
-  | 'sets'
-  | 'strategies'
-  | 'trips';
+type DbConstructor = DatabaseConstructor<any>;
 
-type NotionExtractionMappingItem = {
-  db: DatabaseConstructor<any>;
-  dto: BaseConstructorFunction<any, any>;
-  queryDbResponse: DbQueryResponseType<any>;
+export type DbQueryFactory<TDbClass extends DbConstructor> = (db: InstanceType<TDbClass>) => (
+  start_cursor: string | undefined
+) => Promise<DbQueryResponseType<InstanceType<TDbClass>>>;
+
+type NotionExtractionMappingItem<
+  TDbClass extends DbConstructor,
+  TDtoClass extends BaseConstructorFunction<any, any>,
+  // TODO: Can probably trash this.
+  TQueryResponse = DbQueryResponseType<InstanceType<TDbClass>>,
+> = {
+  DbClass: TDbClass;
+  DtoClass: TDtoClass;
+  dbQueryFactory?: DbQueryFactory<TDbClass>;
 };
 
-export const notionExtractionMapping: {
-  [K in ExtractionMappingKeys]: NotionExtractionMappingItem;
-} = {
-  equipment: {
-    db: ExerciseEquipmentDatabase,
-    dto: ExerciseEquipmentResponseDTO,
-    queryDbResponse: {} as ExerciseEquipmentQueryResponse,
-  },
-  exercises: {
-    db: ExercisesDatabase,
-    dto: ExercisesResponseDTO,
-    queryDbResponse: {} as ExercisesQueryResponse,
-  },
-  muscleGroups: {
-    db: MuscleGroupsDatabase,
-    dto: MuscleGroupsResponseDTO,
-    queryDbResponse: {} as MuscleGroupsQueryResponse,
-  },
-  sets: {
-    db: GymSetDatabase,
-    dto: GymSetResponseDTO,
-    queryDbResponse: {} as GymSetQueryResponse,
-  },
-  strategies: {
-    db: GymSetStrategyDatabase,
-    dto: GymSetStrategyResponseDTO,
-    queryDbResponse: {} as GymSetStrategyQueryResponse,
-  },
-  trips: {
-    db: GymTripLogDatabase,
-    dto: GymTripLogResponseDTO,
-    queryDbResponse: {} as GymTripLogQueryResponse,
-  },
+const equipment: NotionExtractionMappingItem<
+  typeof ExerciseEquipmentDatabase,
+  typeof ExerciseEquipmentResponseDTO,
+  ExerciseEquipmentQueryResponse
+> = {
+  DbClass: ExerciseEquipmentDatabase,
+  DtoClass: ExerciseEquipmentResponseDTO,
 };
 
-type NotionExtractionMapping = typeof notionExtractionMapping;
+const exercises: NotionExtractionMappingItem<
+  typeof ExercisesDatabase,
+  typeof ExercisesResponseDTO,
+  ExercisesQueryResponse
+> = {
+  DbClass: ExercisesDatabase,
+  DtoClass: ExercisesResponseDTO,
+};
+const muscleGroups: NotionExtractionMappingItem<
+  typeof MuscleGroupsDatabase,
+  typeof MuscleGroupsResponseDTO,
+  MuscleGroupsQueryResponse
+> = {
+  DbClass: MuscleGroupsDatabase,
+  DtoClass: MuscleGroupsResponseDTO,
+};
+const sets: NotionExtractionMappingItem<
+  typeof GymSetDatabase,
+  typeof GymSetResponseDTO,
+  GymSetQueryResponse
+> = {
+  DbClass: GymSetDatabase,
+  DtoClass: GymSetResponseDTO,
+};
+const strategies: NotionExtractionMappingItem<
+  typeof GymSetStrategyDatabase,
+  typeof GymSetStrategyResponseDTO,
+  GymSetStrategyQueryResponse
+> = {
+  DbClass: GymSetStrategyDatabase,
+  DtoClass: GymSetStrategyResponseDTO,
+};
+const trips: NotionExtractionMappingItem<
+  typeof GymTripLogDatabase,
+  typeof GymTripLogResponseDTO,
+  GymTripLogQueryResponse
+> = {
+  DbClass: GymTripLogDatabase,
+  DtoClass: GymTripLogResponseDTO,
+  dbQueryFactory: (
+    db: GymTripLogDatabase
+  ) => (
+    start_cursor: string | undefined
+  ) => db.query({
+    sorts: [{ property: 'visitTime', direction: 'ascending' }],
+    start_cursor,
+  }),
+};
+
+export const notionExtractionMapping = {
+  equipment,
+  exercises,
+  muscleGroups,
+  sets,
+  strategies,
+  trips,
+};
+
+export type NotionExtractionMapping = typeof notionExtractionMapping;
+
+export type NotionExtractionMappingKeys = keyof NotionExtractionMapping;
 
 export type DataDtoProps = {
-  [K in keyof NotionExtractionMapping]: NotionExtractionMapping[K]['dto'][];
+  [K in keyof NotionExtractionMapping]: InstanceType<NotionExtractionMapping[K]['DtoClass']>[];
 };
 
 export type ExtractionDbResponseProps = {
-  [K in keyof NotionExtractionMapping]: NotionExtractionMapping[K]['queryDbResponse'][];
+  [K in keyof NotionExtractionMapping]: DbQueryResponseType<InstanceType<NotionExtractionMapping[K]['DbClass']>>[];
 };

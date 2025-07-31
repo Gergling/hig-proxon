@@ -26,7 +26,6 @@ export const configureNotionExtraction = <
 >(
   NotionDatabaseConstructor: TDbConstructor,
   ResponseDTOConstructor: TDtoConstructor,
-  notionSecret: string,
   dbQueryFactory: (db: InstanceType<TDbConstructor>) => (
     start_cursor: string | undefined
   ) => Promise<DbQueryResponseType<InstanceType<TDbConstructor>>> = defaultDbQueryFactory
@@ -49,8 +48,10 @@ export const configureNotionExtraction = <
           Got: ConstructorFirstParameter<TDtoConstructor>;
         };
 
-  const db = createDbInstance(NotionDatabaseConstructor, notionSecret);
-  const dbQuery = dbQueryFactory(db);
+  const getDbQuery = (notionSecret: string) => {
+    const db = createDbInstance(NotionDatabaseConstructor, notionSecret);
+    return dbQueryFactory(db);
+  };
 
   const getDTO = (
     r: ResponseDataType
@@ -65,21 +66,31 @@ export const configureNotionExtraction = <
     .results
     .map(getDTO);
 
-  const queryResponses = () => runQuery<
+  const reduceQueryResponseDTOs = (
+    dtos: DTOInstance[],
+    queryResponse: QueryResponse
+  ) => ([
+    ...dtos,
+    ...getQueryResponseDTOs(queryResponse),
+  ]);
+
+  const queryResponses = (notionSecret: string) => runQuery<
     ResponseDataType,
     QueryResponse
-  >(dbQuery) as Promise<DbQueryResponseType<InstanceType<TDbConstructor>>[]>;
-  const queryDTOs = () => runQuery<
+  >(getDbQuery(notionSecret)) as Promise<DbQueryResponseType<InstanceType<TDbConstructor>>[]>;
+  const queryDTOs = (notionSecret: string) => runQuery<
     ResponseDataType,
     QueryResponse,
     DTOInstance
   >(
-    dbQuery,
+    getDbQuery(notionSecret),
     getQueryResponseDTOs
   ) as Promise<InstanceType<TDtoConstructor>[]>;
 
   return {
+    getQueryResponseDTOs,
     queryDTOs,
     queryResponses,
+    reduceQueryResponseDTOs,
   };
 };

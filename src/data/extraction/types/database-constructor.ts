@@ -1,7 +1,7 @@
-import { QueryDatabaseResponse } from "../../../notion-sdk/core/types/notion-api.types";
+import { NotionQueryResponse } from "../notion/types";
 
 export type DatabaseConstructor<
-  TQueryResponse extends QueryDatabaseResponse
+  TQueryResponse extends NotionQueryResponse<any>
 > = new (
   config: { notionSecret: string }
 ) => {
