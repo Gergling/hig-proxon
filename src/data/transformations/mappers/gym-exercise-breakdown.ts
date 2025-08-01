@@ -1,19 +1,9 @@
-// The highest priority in the list is absolutely muscle groups which have never been used.
-// This means we need to loop a complete set of muscle groups.
-// That means if a muscle group has no activity, we need ALL the exercises for that muscle group so we can loop through them.
-
 import { GymExercise, MuscleGroup, MuscleGroupExercise } from "../../../types";
 import { Temporal } from "temporal-polyfill";
-import { Equipment, MuscleGroupSetActivity, SetProgressionStatusFirst } from "../../../types";
 import { StandardReducer } from "../../../types/common";
-import { getRecencyFactor } from "../calculations/get-recency-factor";
-import { ProposedProps, ViewAggregatedSetProgressionStatus, ViewExerciseBreakdown } from "../../types";
-import { getMappedOrderArray } from "../../../common/utils/get-mapped-order-array";
-import { allSetProgressionStatuses, orderProposedMapping } from "../../../constants/gym";
-import { Comparison, getComparisonFromNumber, getOrder, Order, ORDER_VALUES } from "../../../common/comparison";
-import { RecencyBiasCriteria } from "../../types/recency-bias";
-import { getRecencyBiasedThresholds } from "../../../utils/time-helpers";
-import { getSpliced } from "../../../common/utils/get-spliced";
+import { ProposedProps, ViewExerciseBreakdown } from "../../types";
+import { orderProposedMapping } from "../../../constants/gym";
+import { Comparison, getOrder, Order, ORDER_VALUES } from "../../../common/comparison";
 import { reduceMapped } from "../../../common/utils/mapping";
 import { Mapped } from "../../../common/types/mapping";
 import { getMiddleItem } from "../../../utils/common-helpers";
@@ -22,7 +12,7 @@ import { getAscendingProgressionStatusComparison } from "../calculations/gym";
 import { ExerciseSet, UniqueExerciseSets } from "../types/gym";
 import { getMuscleGroupActivityThresholds, getMuscleGroupRecencyFactors } from "./gym-muscle-group-activity";
 
-const reduceMuscleGroupExercise: StandardReducer<
+export const reduceMuscleGroupExercise: StandardReducer<
   UniqueExerciseSets,
   MuscleGroupExercise
 > = (
