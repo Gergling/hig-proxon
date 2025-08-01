@@ -25,6 +25,7 @@ export const getMuscleGroupActivityThresholds = (
   activityDateThresholds,
   mostRecentActivityDate
 );
+
 const reduceRecencyFactors: StandardReducer<
   {
     date7DaysPrior: Temporal.PlainDate;
