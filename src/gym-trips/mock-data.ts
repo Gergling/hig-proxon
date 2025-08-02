@@ -1,4 +1,5 @@
-import { Equipment, ExerciseMuscleGroup, GymExercise, GymExerciseSet, GymSetStrategy, MuscleGroup } from "../types";
+import { Temporal } from "temporal-polyfill";
+import { Equipment, ExerciseMuscleGroup, GymExercise, GymExerciseSet, GymSetStrategy, GymTripProps, MuscleGroup } from "../types";
 
 export const mockGymEquipment: Equipment = {
   name: 'Muscle Machine',
@@ -40,3 +41,19 @@ export const mockGymExerciseSet: GymExerciseSet = {
   strategy: mockGymSetStrategy,
   validity: 'valid',
 };
+
+export const mockGymTrip: GymTripProps = {
+  muscleScore: 2,
+  sets: [],
+  status: undefined,
+  tqi: 1,
+  visitDate: Temporal.PlainDate.from('2025-08-02'),
+};
+
+export const getMockGymTrip = (
+  gymTrip: Partial<GymTripProps>
+): GymTripProps => ({
+  ...mockGymTrip,
+  ...gymTrip,
+});
+

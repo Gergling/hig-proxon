@@ -32,6 +32,7 @@ export const getMAI = (
       const msiSum = getMSI(comparisonTrip) + reduced.msiSum;
       return {
         ...reduced,
+        trips: [...reduced.trips, comparisonTrip],
         msiSum,
       };
     }, {
