@@ -1,4 +1,4 @@
-import { Equipment, GymExercise, GymExerciseSet, GymSetStrategy } from "../types";
+import { Equipment, ExerciseMuscleGroup, GymExercise, GymExerciseSet, GymSetStrategy, MuscleGroup } from "../types";
 
 export const mockGymEquipment: Equipment = {
   name: 'Muscle Machine',
@@ -9,6 +9,18 @@ export const mockGymSetStrategy: GymSetStrategy = {
   maximum: 15,
   minimum: 7,
   name: 'Mock Hypertrophic Strategy',
+};
+
+export const mockMuscleGroup: MuscleGroup = {
+  activity: [],
+  exercises: [],
+  id: 'muscle-group-id-pectorals',
+  name: 'Mock Muscle Group Pectorals',
+};
+
+export const mockExerciseMuscleGroup: ExerciseMuscleGroup = {
+  focus: true,
+  muscleGroup: mockMuscleGroup,
 };
 
 export const mockGymExercise: GymExercise = {

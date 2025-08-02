@@ -2,9 +2,10 @@ import { DTOProps, SetProgressionStatus } from "../../types";
 import { getMiddleItem } from "../../utils/common-helpers";
 import { getCurrentUtcInstant, instantToISOString } from "../../utils/time-helpers";
 import { View, ViewAggregatedSetProgressionStatus, ViewExerciseBreakdown, ViewProcess, ViewVisit } from "../types";
-import { getLast7DaysActivity, reduceLast7DaysTrips } from "./aggregators/activity";
+import { getLast7DaysActivity, getMonthlyActivity, reduceLast7DaysTrips } from "./aggregators/activity";
 import { getViewMuscleGroups } from "./enrichers";
 import { getGymData } from "./get-gym-data";
+import { normaliseGymSetMuscleGroups } from "./normalisers/gym-set-muscle-groups";
 
 export const transformAll = (
   dtos: DTOProps
@@ -17,6 +18,22 @@ export const transformAll = (
     gymTrips,
   } = getGymData(dtos);
   const mostRecentActivityDate = getMostRecentActivityDate();
+
+  // REFORMATION
+  // In which we just normalise first.
+  // if (mostRecentActivityDate) {
+  //   const activityDate90DaysBeforeMostRecent = mostRecentActivityDate?.subtract({ days: 90 });
+  //   const normalisedGymSetMuscleGroups = normaliseGymSetMuscleGroups(
+  //     gymTrips,
+  //     activityDate90DaysBeforeMostRecent
+  //   );
+  // }
+
+  // Then we aggregate.
+  const monthlyActivity = getMonthlyActivity(gymTrips);
+
+  // END REFORMATION
+
   const muscleGroups = getMuscleGroups();
   const {
     ems0ntn,
@@ -27,6 +44,7 @@ export const transformAll = (
     status,
     visits,
   } = getLast7DaysActivity(gymTrips, mostRecentActivityDate);
+
 
   const favourites = getFavouriteExercises().map(({ name }) => name);
   // TODO: Priority/supplemental exercises need to be found based on the
@@ -131,6 +149,7 @@ export const transformAll = (
     // trips,
 
     exercise,
+    monthlyActivity,
     muscles,
     process,
   };

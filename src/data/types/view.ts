@@ -1,5 +1,6 @@
 import { Temporal } from "temporal-polyfill";
 import { SetProgressionStatus } from "../../types";
+import { AggregatedMonthlyActivity } from "../transformations/types/gym";
 
 export type ViewAggregatedSetProgressionStatus = SetProgressionStatus | 'none';
 
@@ -72,6 +73,7 @@ export type ViewProcess = {
 export type View = {
   exercise: ViewExerciseBreakdown;
   lastUpdatedTime: string;
+  monthlyActivity: AggregatedMonthlyActivity[];
   muscles: ViewMuscleGroup[];
   process: ViewProcess;
 };

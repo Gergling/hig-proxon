@@ -6,6 +6,8 @@ import { getRecencyBiasedWeekdays } from "../aggregators";
 import { ViewAggregatedSetProgressionStatus, ViewVisit } from "../../types";
 import { getSplicedStatuses } from "../utils/get-spliced-statuses";
 import { getMiddleItem } from "../../../utils/common-helpers";
+import { getMAI } from "../calculations/indexes";
+import { AggregatedMonthlyActivity } from "../types/gym";
 
 type ReduceActivityState = {
   exerciseActivity: ExerciseActivityMapping;
@@ -185,4 +187,67 @@ export const getLast7DaysActivity = (
     status,
     visits,
   };
+};
+
+export const getMonthlyActivity = (
+  trips: GymTripProps[]
+): AggregatedMonthlyActivity[] => {
+  const {
+    sumMonthlyActivity
+  } = trips.reduce(
+    (
+      reduced,
+      trip
+    ) => {
+      const { visitDate } = trip;
+
+      // Key data.
+      const month = Temporal.PlainYearMonth.from(visitDate);
+      const key = month.toString();
+      const monthActivity: AggregatedMonthlyActivity = reduced.sumMonthlyActivity[key] || {
+        mai: 0,
+        month,
+        msi: 0,
+        count: 0,
+      };
+      
+      // Value data.
+      const count = monthActivity.count + 1;
+      const {
+        mai,
+        msi,
+      } = getMAI(reduced.last7DaysTrips, trip);
+
+      return {
+        ...reduced, // Remove this
+        monthlyActivity: {
+          ...reduced.sumMonthlyActivity,
+          [key]: {
+            ...monthActivity,
+            count,
+            mai,
+            msi,
+          },
+        },
+      };
+    },
+    {
+      last7DaysTrips: [] as GymTripProps[],
+      sumMonthlyActivity: {} as { [K: string]: AggregatedMonthlyActivity; }
+    }
+  );
+
+  return Object.values(sumMonthlyActivity).map(({
+    count,
+    mai,
+    msi,
+    ...monthlyActivity
+  }) => {
+    return {
+      count,
+      mai: mai / count,
+      msi: msi / count,
+      ...monthlyActivity,
+    }
+  });
 };
