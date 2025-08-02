@@ -220,13 +220,13 @@ export const getMonthlyActivity = (
 
       return {
         ...reduced, // Remove this
-        monthlyActivity: {
+        sumMonthlyActivity: {
           ...reduced.sumMonthlyActivity,
           [key]: {
             ...monthActivity,
             count,
-            mai,
-            msi,
+            mai: mai + monthActivity.mai,
+            msi: msi + monthActivity.msi,
           },
         },
       };
