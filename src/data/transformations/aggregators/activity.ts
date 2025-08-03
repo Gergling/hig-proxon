@@ -196,7 +196,10 @@ export const getMonthlyActivity = (
     sumMonthlyActivity
   } = trips.reduce(
     (
-      reduced,
+      {
+        last7DaysTrips,
+        sumMonthlyActivity,
+      },
       trip
     ) => {
       const { visitDate } = trip;
@@ -204,7 +207,7 @@ export const getMonthlyActivity = (
       // Key data.
       const month = Temporal.PlainYearMonth.from(visitDate);
       const key = month.toString();
-      const monthActivity: AggregatedMonthlyActivity = reduced.sumMonthlyActivity[key] || {
+      const monthActivity: AggregatedMonthlyActivity = sumMonthlyActivity[key] || {
         mai: 0,
         month,
         msi: 0,
@@ -216,12 +219,13 @@ export const getMonthlyActivity = (
       const {
         mai,
         msi,
-      } = getMAI(reduced.last7DaysTrips, trip);
+        last7DaysTrips: updated7DaysTrips,
+      } = getMAI(last7DaysTrips, trip);
 
       return {
-        ...reduced, // Remove this
+        last7DaysTrips: updated7DaysTrips,
         sumMonthlyActivity: {
-          ...reduced.sumMonthlyActivity,
+          ...sumMonthlyActivity,
           [key]: {
             ...monthActivity,
             count,
