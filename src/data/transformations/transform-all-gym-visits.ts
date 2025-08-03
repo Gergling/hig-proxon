@@ -1,11 +1,10 @@
 import { DTOProps, SetProgressionStatus } from "../../types";
 import { getMiddleItem } from "../../utils/common-helpers";
 import { getCurrentUtcInstant, instantToISOString } from "../../utils/time-helpers";
-import { View, ViewAggregatedSetProgressionStatus, ViewExerciseBreakdown, ViewProcess, ViewVisit } from "../types";
-import { getLast7DaysActivity, getMonthlyActivity, reduceLast7DaysTrips } from "./aggregators/activity";
+import { View, ViewExerciseBreakdown, ViewProcess } from "../types";
+import { getLast7DaysActivity, getMonthlyActivity } from "./aggregators/activity";
 import { getViewMuscleGroups } from "./enrichers";
 import { getGymData } from "./get-gym-data";
-import { normaliseGymSetMuscleGroups } from "./normalisers/gym-set-muscle-groups";
 
 export const transformAll = (
   dtos: DTOProps

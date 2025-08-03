@@ -1,7 +1,9 @@
 import { createHmac } from 'crypto'; // Node.js built-in crypto module
 import { NextFunction, Request, Response } from "express";
-import { extractAll, store } from "../data";
+import { store } from "../data";
 import { transformAll } from "../data/transformations/transform-all-gym-visits";
+import { extractAll } from '../data/extraction/notion/extract-all';
+import { DataDtoProps } from '../data/types/notion';
 
 // export const addGymTrip = async (
 //   _: Request,
@@ -137,7 +139,7 @@ export const addGymTrip = async (
         // In the future, you'd implement incremental updates based on `payload.event`.
         console.log('Triggering full cache refresh due to Notion webhook...');
         // const rawNotionDTOs: DTOProps = await extractAllData(NOTION_API_TOKEN);
-        const dtos = await extractAll();
+        const dtos = await extractAll() as DataDtoProps;
         const data = transformAll(dtos);
         await store(data);
         // await refreshAndStoreCache(rawNotionDTOs); // This updates S3 and in-memory cache
