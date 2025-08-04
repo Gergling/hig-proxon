@@ -45,6 +45,12 @@ export type ViewMuscleGroup = ViewMuscleGroupInterim & {
   };
 };
 
+export type ViewMuscleGroups = {
+  favourites: ViewMuscleGroup[];
+  highestContribution: number;
+  priority: ViewMuscleGroup[];
+};
+
 type ViewProcessDeadlineStatus =
   | 'dormant'
   | 'slow'
@@ -70,10 +76,18 @@ export type ViewProcess = {
   visits: ViewVisit[];
 };
 
+export type ViewAchievement = {
+  date: Temporal.PlainDate;
+  description: string;
+  precedented: boolean;
+  goalType: 'process' | 'performance' | 'outcome';
+};
+
 export type View = {
+  achievements: ViewAchievement[];
   exercise: ViewExerciseBreakdown;
   lastUpdatedTime: string;
   monthlyActivity: AggregatedMonthlyActivity[];
-  muscles: ViewMuscleGroup[];
+  muscles: ViewMuscleGroups;
   process: ViewProcess;
 };

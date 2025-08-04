@@ -12,6 +12,7 @@ import { MuscleGroupAggregation } from "../aggregators/types";
 import { getMiddleItem } from "../../../utils/common-helpers";
 import { getProgressionStatusComparison } from "../utils/get-progression-status-comparison";
 import { getComparisonFromNumber } from "../../../common/comparison";
+import { ViewAggregatedSetProgressionStatus, ViewMuscleGroup } from "../../types";
 
 // * In the last week.
 const activityDateThresholds: RecencyBiasCriteria[] = [
@@ -134,33 +135,40 @@ export const compareMuscleGroupAggregations = (
 };
 
 type MuscleGroupAggregationCoupling = {
-  aggregation: MuscleGroupAggregation,
-  muscleGroup: MuscleGroup,
+  aggregation: MuscleGroupAggregation;
+  muscleGroup: MuscleGroup;
+  status: ViewAggregatedSetProgressionStatus;
 };
 export const getMuscleGroupsFromAggregation = (
   getMuscleGroupById: (id: string) => MuscleGroup | undefined,
   aggregations: MuscleGroupAggregation[]
 ): {
-  priorityMuscleGroups: MuscleGroup[]
+  highestContribution: number;
+  priorityMuscleGroups: ViewMuscleGroup[];
 } => {
   const {
-    priority
+    priority,
+    sumActivity,
   } = aggregations.reduce(
     (
       state,
       aggregation
     ) => {
-      const { muscleGroupId } = aggregation;
+      const { muscleGroupId, statuses } = aggregation;
       const muscleGroup = getMuscleGroupById(muscleGroupId);
 
       // If we can't find the muscle group, we can't do anything with this anyway.
       if (!muscleGroup) return state;
 
+      // TODO: This operation is duplicated a lot and doesn't need to be,
+      // but I can't be bothered with the refactor right now.
+      const status: ViewAggregatedSetProgressionStatus = getMiddleItem(statuses) || 'none';
       const priority = getSpliced(
         state.priority,
         {
           aggregation,
           muscleGroup,
+          status,
         },
         (one, two) => getComparisonFromNumber(
           // The output would give us descending order of status then
@@ -168,24 +176,48 @@ export const getMuscleGroupsFromAggregation = (
           -compareMuscleGroupAggregations(one.aggregation, two.aggregation)
         )
       );
+      const sumActivity = state.sumActivity + aggregation.activity;
+
       // Could use the status and activity score to put the relevant muscle group in
       // order in an appropriate place.
       return {
-        priority
+        priority,
+        sumActivity,
       };
     },
     {
       priority: [] as MuscleGroupAggregationCoupling[],
+      sumActivity: 0,
+    }
+  );
+  console.log(sumActivity)
+
+  // Map out ViewMuscleGroup[] as a separate phase from whatever we put
+  // together above.
+  let highestContribution = 0;
+  const priorityMuscleGroups = priority.map(
+    ({
+      aggregation: {
+        activity
+      },
+      muscleGroup,
+      status
+    }): ViewMuscleGroup => {
+      const contribution = activity / sumActivity;
+      highestContribution = Math.max(contribution, highestContribution);
+      return {
+        activity: {
+          contribution,
+          ems0ntn: activity,
+        },
+        name: muscleGroup.name,
+        status,
+      };
     }
   );
 
-  // Map out muscle groups as a separate phase from whatever we put
-  // together above.
-  const priorityMuscleGroups = priority.map(
-    ({ muscleGroup }) => muscleGroup
-  );
-
   return {
+    highestContribution,
     priorityMuscleGroups,
   };
 };

@@ -1,10 +1,30 @@
-import { DTOProps, SetProgressionStatus } from "../../types";
+import { Temporal } from "temporal-polyfill";
+import { DTOProps, GymTripProps, SetProgressionStatus } from "../../types";
 import { getMiddleItem } from "../../utils/common-helpers";
 import { getCurrentUtcInstant, instantToISOString } from "../../utils/time-helpers";
-import { View, ViewExerciseBreakdown, ViewProcess } from "../types";
+import { View, ViewAchievement, ViewExerciseBreakdown, ViewMuscleGroups, ViewProcess } from "../types";
 import { getLast7DaysActivity, getMonthlyActivity } from "./aggregators/activity";
 import { getViewMuscleGroups } from "./enrichers";
 import { getGymData } from "./get-gym-data";
+import { normaliseGymSetMuscleGroups } from "./normalisers/gym-set-muscle-groups";
+import { aggregateGymSetMuscleGroups } from "./aggregators/normalised-gym-set-muscle-groups";
+import { NormalisedGymSetMuscleGroup } from "./types/gym";
+import { getMuscleGroupsFromAggregation } from "./mappers/gym-muscle-group-activity";
+
+const getNormalisedGymSetMuscleGroups = (
+  mostRecentActivityDate: Temporal.PlainDate | undefined,
+  gymTrips: GymTripProps[],
+) => {
+  if (mostRecentActivityDate) {
+    const activityDate90DaysBeforeMostRecent = mostRecentActivityDate?.subtract({ days: 90 });
+    return normaliseGymSetMuscleGroups(
+      gymTrips,
+      activityDate90DaysBeforeMostRecent
+    );
+  }
+
+  return [];
+};
 
 export const transformAll = (
   dtos: DTOProps
@@ -13,6 +33,7 @@ export const transformAll = (
     getExerciseBreakdown,
     getFavouriteExercises,
     getMostRecentActivityDate,
+    getMuscleGroupById,
     getMuscleGroups,
     gymTrips,
   } = getGymData(dtos);
@@ -20,23 +41,37 @@ export const transformAll = (
 
   // REFORMATION
   // In which we just normalise first.
-  // if (mostRecentActivityDate) {
-  //   const activityDate90DaysBeforeMostRecent = mostRecentActivityDate?.subtract({ days: 90 });
-  //   const normalisedGymSetMuscleGroups = normaliseGymSetMuscleGroups(
-  //     gymTrips,
-  //     activityDate90DaysBeforeMostRecent
-  //   );
-  // }
-
+  const normalisedGymSetMuscleGroups = getNormalisedGymSetMuscleGroups(
+    mostRecentActivityDate,
+    gymTrips
+  );
+  const achievements: ViewAchievement[] = [];
+  
   // Then we aggregate.
+  const aggregatedMuscleGroups = mostRecentActivityDate
+    ? aggregateGymSetMuscleGroups(normalisedGymSetMuscleGroups, mostRecentActivityDate)
+    : [];
   const monthlyActivity = getMonthlyActivity(gymTrips);
+  console.log(aggregatedMuscleGroups[0])
+
+  // View format.
+  const {
+    highestContribution,
+    priorityMuscleGroups
+  } = getMuscleGroupsFromAggregation(getMuscleGroupById, aggregatedMuscleGroups);
+
+  const muscles: ViewMuscleGroups = {
+    favourites: [],
+    highestContribution,
+    priority: priorityMuscleGroups,
+  };
 
   // END REFORMATION
 
   const muscleGroups = getMuscleGroups();
   const {
     ems0ntn,
-    muscles,
+    // muscles,
   } = getViewMuscleGroups(muscleGroups, mostRecentActivityDate);
 
   const {
@@ -143,11 +178,9 @@ export const transformAll = (
   // * muscle groups
   // * overview(?)
   return {
-    lastUpdatedTime,
-    // muscleGroups,
-    // trips,
-
+    achievements,    
     exercise,
+    lastUpdatedTime,
     monthlyActivity,
     muscles,
     process,

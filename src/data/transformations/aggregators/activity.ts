@@ -43,7 +43,7 @@ export const reduceActivity: StandardReducer<
   const { id } = exercise;
 
   const mostRecentActivityDate = state.mostRecentActivityDate
-    && Temporal.PlainDate.compare(date, state.mostRecentActivityDate) > 0
+    && Temporal.PlainDate.compare(state.mostRecentActivityDate, date) > 0
     ? state.mostRecentActivityDate
     : date;
 
