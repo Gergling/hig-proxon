@@ -52,7 +52,6 @@ export const transformAll = (
     ? aggregateGymSetMuscleGroups(normalisedGymSetMuscleGroups, mostRecentActivityDate)
     : [];
   const monthlyActivity = getMonthlyActivity(gymTrips);
-  console.log(aggregatedMuscleGroups[0])
 
   // View format.
   const {

@@ -190,7 +190,6 @@ export const getMuscleGroupsFromAggregation = (
       sumActivity: 0,
     }
   );
-  console.log(sumActivity)
 
   // Map out ViewMuscleGroup[] as a separate phase from whatever we put
   // together above.
