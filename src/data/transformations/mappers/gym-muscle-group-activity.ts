@@ -1,8 +1,3 @@
-// Let's sort by activity FIRST. Activity can be in 4 levels:
-// * Never.
-// * More than 2 weeks ago.
-// * More than a week ago.
-
 import { Temporal } from "temporal-polyfill";
 import { MuscleGroup, MuscleGroupSetActivity } from "../../../types";
 import { RecencyBiasCriteria } from "../../types/recency-bias";
@@ -16,6 +11,7 @@ import { getRecencyBiasedThresholds } from "../../../utils/time-helpers";
 import { MuscleGroupAggregation } from "../aggregators/types";
 import { getMiddleItem } from "../../../utils/common-helpers";
 import { getProgressionStatusComparison } from "../utils/get-progression-status-comparison";
+import { getComparisonFromNumber } from "../../../common/comparison";
 
 // * In the last week.
 const activityDateThresholds: RecencyBiasCriteria[] = [
@@ -120,7 +116,7 @@ export const getMuscleGroupRecencyFactors = (
 export const compareMuscleGroupAggregations = (
   one: MuscleGroupAggregation,
   two: MuscleGroupAggregation,
-) => {
+): number => {
   const statusOne = getMiddleItem(one.statuses);
   const statusTwo = getMiddleItem(two.statuses);
   // If the first argument is inferior, the output will be negative.
@@ -137,18 +133,59 @@ export const compareMuscleGroupAggregations = (
   return one.activity - two.activity;
 };
 
-export const getMuscleGroupsWhatever = (
+type MuscleGroupAggregationCoupling = {
+  aggregation: MuscleGroupAggregation,
+  muscleGroup: MuscleGroup,
+};
+export const getMuscleGroupsFromAggregation = (
   getMuscleGroupById: (id: string) => MuscleGroup | undefined,
   aggregations: MuscleGroupAggregation[]
-) => {
-  aggregations.forEach(({
-    activity,
-    muscleGroupId,
-    statuses,
-  }) => {
-    const muscleGroup = getMuscleGroupById(muscleGroupId);
-    const status = getMiddleItem(statuses);
-    // Could use the status and activity score to put the relevant muscle group in
-    // order in an appropriate place.
-  });
+): {
+  priorityMuscleGroups: MuscleGroup[]
+} => {
+  const {
+    priority
+  } = aggregations.reduce(
+    (
+      state,
+      aggregation
+    ) => {
+      const { muscleGroupId } = aggregation;
+      const muscleGroup = getMuscleGroupById(muscleGroupId);
+
+      // If we can't find the muscle group, we can't do anything with this anyway.
+      if (!muscleGroup) return state;
+
+      const priority = getSpliced(
+        state.priority,
+        {
+          aggregation,
+          muscleGroup,
+        },
+        (one, two) => getComparisonFromNumber(
+          // The output would give us descending order of status then
+          // activity, and we want ascending.
+          -compareMuscleGroupAggregations(one.aggregation, two.aggregation)
+        )
+      );
+      // Could use the status and activity score to put the relevant muscle group in
+      // order in an appropriate place.
+      return {
+        priority
+      };
+    },
+    {
+      priority: [] as MuscleGroupAggregationCoupling[],
+    }
+  );
+
+  // Map out muscle groups as a separate phase from whatever we put
+  // together above.
+  const priorityMuscleGroups = priority.map(
+    ({ muscleGroup }) => muscleGroup
+  );
+
+  return {
+    priorityMuscleGroups,
+  };
 };

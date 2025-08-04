@@ -1,5 +1,6 @@
+import { MuscleGroup } from "../../../types";
 import { MuscleGroupAggregation } from "../aggregators/types";
-import { compareMuscleGroupAggregations } from "./gym-muscle-group-activity";
+import { compareMuscleGroupAggregations, getMuscleGroupsFromAggregation } from "./gym-muscle-group-activity";
 
 describe("compareMuscleGroupAggregations", () => {
   // Test Case 1: First aggregation has no statuses.
@@ -66,5 +67,117 @@ describe("compareMuscleGroupAggregations", () => {
     const two: MuscleGroupAggregation = { muscleGroupId: 'mg2', statuses: ["steady"], activity: 10 };
 
     expect(compareMuscleGroupAggregations(one, two)).toBe(0);
+  });
+});
+
+describe("getMuscleGroupsFromAggregation", () => {
+  // TODO: Move to mock data.
+  // Define sample data for testing. These will be the "database" of muscle groups.
+  const squat: MuscleGroup = {
+    id: "squat",
+    name: "Squat",
+    activity: [],
+    exercises: []
+  };
+  const benchPress: MuscleGroup = {
+    id: "bench-press",
+    name: "Bench Press",
+    activity: [],
+    exercises: []
+  };
+  const deadlift: MuscleGroup = {
+    id: "deadlift",
+    name: "Deadlift",
+    activity: [],
+    exercises: []
+  };
+  const unknownMuscleGroup: MuscleGroup = {
+    id: "unknown",
+    name: "Unknown",
+    activity: [],
+    exercises: []
+  };
+
+  // Define a set of aggregations to be processed.
+  const aggregations: MuscleGroupAggregation[] = [
+    // Deadlift has high activity and a growth status.
+    { muscleGroupId: deadlift.id, statuses: ["growth"], activity: 100 },
+    // Bench press has steady status and medium activity.
+    { muscleGroupId: benchPress.id, statuses: ["steady"], activity: 50 },
+    // Squat has low activity and a rehab status.
+    { muscleGroupId: squat.id, statuses: ["rehab"], activity: 20 },
+    // This muscle group will not be found by our mock function.
+    { muscleGroupId: "not-in-db", statuses: ["growth"], activity: 150 },
+  ];
+
+  // A mock `getMuscleGroupById` function to simulate fetching data from a source.
+  const mockGetMuscleGroupById = jest.fn((id: string): MuscleGroup | undefined => {
+    switch (id) {
+      case squat.id:
+        return squat;
+      case benchPress.id:
+        return benchPress;
+      case deadlift.id:
+        return deadlift;
+      default:
+        return undefined; // Simulate no muscle group found
+    }
+  });
+
+  // Test Case 1: Successfully sorts muscle groups by ascending priority, filtering out unknown IDs.
+  it("should return muscle groups sorted by ascending priority and filter out unknown IDs", () => {
+    // The `compareMuscleGroupAggregations` function is used to create a descending
+    // order of priority, but the `getSpliced` function then negates the comparison
+    // number to get the final ascending priority.
+    // Therefore, the expected order is based on the lowest priority item first.
+    const expectedPriority = [squat, benchPress, deadlift];
+
+    const { priorityMuscleGroups } = getMuscleGroupsFromAggregation(
+      mockGetMuscleGroupById,
+      aggregations
+    );
+
+    // The final array of muscle groups should be sorted and the 'not-in-db' item should be removed.
+    expect(priorityMuscleGroups).toEqual(expectedPriority);
+  });
+
+  // Test Case 2: Handles an empty input array gracefully.
+  it("should return an empty array if the aggregations input is empty", () => {
+    const { priorityMuscleGroups } = getMuscleGroupsFromAggregation(
+      mockGetMuscleGroupById,
+      []
+    );
+
+    // An empty input array should result in an empty output array.
+    expect(priorityMuscleGroups).toEqual([]);
+  });
+
+  // Test Case 3: Handles a case where all muscle groups are not found.
+  it("should return an empty array if no muscle groups are found by the getter", () => {
+    const aggregationsWithUnknowns: MuscleGroupAggregation[] = [
+      { muscleGroupId: "unknown1", statuses: ["growth"], activity: 100 },
+      { muscleGroupId: "unknown2", statuses: ["steady"], activity: 50 },
+    ];
+
+    const { priorityMuscleGroups } = getMuscleGroupsFromAggregation(
+      mockGetMuscleGroupById,
+      aggregationsWithUnknowns
+    );
+
+    expect(priorityMuscleGroups).toEqual([]);
+  });
+
+  // Test Case 4: Handles a single item in the input array.
+  it("should handle a single aggregation correctly", () => {
+    const singleAggregation: MuscleGroupAggregation[] = [
+      { muscleGroupId: deadlift.id, statuses: ["growth"], activity: 100 },
+    ];
+
+    const { priorityMuscleGroups } = getMuscleGroupsFromAggregation(
+      mockGetMuscleGroupById,
+      singleAggregation
+    );
+
+    expect(priorityMuscleGroups).toEqual([deadlift]);
   });
 });
