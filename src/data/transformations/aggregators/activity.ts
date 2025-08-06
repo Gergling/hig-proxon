@@ -202,12 +202,13 @@ export const getMonthlyActivity = (
       },
       trip
     ) => {
-      const { visitDate } = trip;
+      const { muscleScore, visitDate } = trip;
 
       // Key data.
       const month = Temporal.PlainYearMonth.from(visitDate);
       const key = month.toString();
       const monthActivity: AggregatedMonthlyActivity = sumMonthlyActivity[key] || {
+        ems: 0,
         mai: 0,
         month,
         msi: 0,
@@ -229,6 +230,7 @@ export const getMonthlyActivity = (
           [key]: {
             ...monthActivity,
             count,
+            ems: muscleScore + monthActivity.ems,
             mai: mai + monthActivity.mai,
             msi: msi + monthActivity.msi,
           },
